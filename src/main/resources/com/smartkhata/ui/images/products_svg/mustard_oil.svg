@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgMustard" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FEFCE8"/>
+      <stop offset="100%" stop-color="#FEF08A"/>
+    </linearGradient>
+    <linearGradient id="mustardGlass" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#B45309"/>
+      <stop offset="40%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#92400E"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="116" height="116" rx="22" fill="url(#bgMustard)" stroke="#FDE047" stroke-width="2"/>
+  <ellipse cx="64" cy="111" rx="28" ry="5" fill="#78350F" opacity="0.2"/>
+  <!-- Tall Bottle -->
+  <path d="M55,22 L73,22 L75,38 L86,49 C89,52 90,56 90,62 L90,99 C90,104 86,108 81,108 L47,108 C42,108 38,104 38,99 L38,62 C38,56 39,52 42,49 L53,38 Z" fill="url(#mustardGlass)" stroke="#78350F" stroke-width="1.8"/>
+  <rect x="52" y="14" width="24" height="10" rx="3" fill="#DC2626"/>
+  <path d="M44,54 L44,98" stroke="#FDE68A" stroke-width="2.6" stroke-linecap="round" opacity="0.7"/>
+  <!-- Label -->
+  <rect x="44" y="60" width="40" height="33" rx="6" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.4"/>
+  <!-- Mustard Flower Emblem -->
+  <circle cx="64" cy="76" r="4" fill="#B45309"/>
+  <circle cx="64" cy="69" r="3.5" fill="#FACC15"/>
+  <circle cx="64" cy="83" r="3.5" fill="#FACC15"/>
+  <circle cx="57" cy="76" r="3.5" fill="#FACC15"/>
+  <circle cx="71" cy="76" r="3.5" fill="#FACC15"/>
+  <circle cx="64" cy="76" r="2.5" fill="#92400E"/>
+</svg>
+

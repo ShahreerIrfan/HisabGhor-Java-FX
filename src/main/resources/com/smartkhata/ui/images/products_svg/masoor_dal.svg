@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgDal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFF1F2"/>
+      <stop offset="100%" stop-color="#FFE4E6"/>
+    </linearGradient>
+    <linearGradient id="dalMound" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FB923C"/>
+      <stop offset="100%" stop-color="#EA580C"/>
+    </linearGradient>
+    <linearGradient id="dalBowl" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#E2E8F0"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="116" height="116" rx="22" fill="url(#bgDal)" stroke="#FECDD3" stroke-width="2"/>
+  <ellipse cx="64" cy="108" rx="40" ry="6" fill="#BE123C" opacity="0.16"/>
+  <!-- Lentil Mound -->
+  <path d="M26,64 C32,42 46,35 64,35 C82,35 96,42 102,64 Z" fill="url(#dalMound)" stroke="#C2410C" stroke-width="1.6"/>
+  <!-- Lentil grains texture -->
+  <circle cx="52" cy="48" r="3" fill="#FDBA74"/>
+  <circle cx="66" cy="43" r="3.2" fill="#FED7AA"/>
+  <circle cx="78" cy="49" r="3" fill="#C2410C"/>
+  <circle cx="44" cy="56" r="3.2" fill="#C2410C"/>
+  <circle cx="59" cy="54" r="3.2" fill="#FDBA74"/>
+  <circle cx="71" cy="56" r="3.2" fill="#EA580C"/>
+  <circle cx="85" cy="57" r="3" fill="#FDBA74"/>
+  <!-- Bowl -->
+  <path d="M22,64 L106,64 C104,90 88,104 64,104 C40,104 24,90 22,64 Z" fill="url(#dalBowl)" stroke="#94A3B8" stroke-width="1.8"/>
+  <path d="M25,73 L103,73 L101,80 L27,80 Z" fill="#008A32"/>
+  <rect x="47" y="102" width="34" height="5" rx="2.5" fill="#94A3B8"/>
+</svg>
+

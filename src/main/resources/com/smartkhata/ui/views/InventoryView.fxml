@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.smartkhata.controller.InventoryController"
+      spacing="13.0" styleClass="main-content, inv-page-root">
+    <padding>
+        <Insets top="16.0" right="20.0" bottom="18.0" left="20.0"/>
+    </padding>
+
+    <!-- Top Header Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="12.0">
+        <!-- Left Icon Badge + Title & Subtitle -->
+        <HBox alignment="CENTER_LEFT" spacing="11.0" HBox.hgrow="ALWAYS" minWidth="0.0">
+            <StackPane styleClass="inv-header-badge">
+                <SVGPath content="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16zM3.27 6.96L12 12.01l8.73-5.05M12 22.08V12"
+                         fill="transparent" stroke="#0E7B3A" strokeWidth="1.9" scaleX="0.82" scaleY="0.82"/>
+            </StackPane>
+
+            <VBox spacing="2.0" minWidth="0.0">
+                <Label text="Inventory – Products &amp; Stock Ledger (পণ্য ও মজুদ খাতা)"
+                       style="-fx-font-size: 18.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                <Label text="Track all products, current stock, stock value, and stock movements."
+                       style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+            </VBox>
+        </HBox>
+
+        <!-- Right Header Action Buttons -->
+        <HBox alignment="CENTER_RIGHT" spacing="9.0" minWidth="-Infinity">
+            <Button fx:id="btnAdjustStock" text="Stock Adjustment" onAction="#onAdjustStock"
+                    styleClass="inv-outline-btn" minWidth="-Infinity">
+                <graphic>
+                    <SVGPath content="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"
+                             fill="#334155" scaleX="0.72" scaleY="0.72"/>
+                </graphic>
+            </Button>
+
+            <MenuButton fx:id="btnImportExport" text="Import/Export" styleClass="inv-outline-btn" minWidth="-Infinity">
+                <graphic>
+                    <SVGPath content="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"
+                             fill="#334155" scaleX="0.72" scaleY="0.72"/>
+                </graphic>
+                <items>
+                    <MenuItem text="Export Inventory CSV (সব পণ্য ও মজুদ)" onAction="#onExportInventoryCsv"/>
+                    <MenuItem text="Import Products from CSV" onAction="#onImportInventoryCsv"/>
+                    <MenuItem text="Download CSV Import Template" onAction="#onDownloadCsvTemplate"/>
+                    <SeparatorMenuItem/>
+                    <MenuItem text="Manage Categories (ক্যাটাগরি ব্যবস্থাপনা)" onAction="#onManageCategories"/>
+                </items>
+            </MenuButton>
+
+            <Button fx:id="btnAddProduct" text="Add Product" onAction="#onAddProduct"
+                    styleClass="btn-emerald-primary" minWidth="-Infinity" prefHeight="38.0"
+                    style="-fx-background-radius: 9px; -fx-padding: 0 16px; -fx-graphic-text-gap: 6px; -fx-font-size: 12.5px;">
+                <graphic>
+                    <SVGPath content="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+                             fill="#FFFFFF" scaleX="0.72" scaleY="0.72"/>
+                </graphic>
+            </Button>
+        </HBox>
+    </HBox>
+
+    <!-- 5 KPI Summary Cards Row -->
+    <HBox spacing="12.0">
+        <!-- 1. Total Products -->
+        <StackPane fx:id="cardTotalProducts" HBox.hgrow="ALWAYS" styleClass="inv-kpi-card">
+            <SVGPath content="M 0,48 C 45,38 95,12 160,20 L 160,48 Z"
+                     fill="#DCFCE7" opacity="0.55" mouseTransparent="true" StackPane.alignment="BOTTOM_RIGHT"/>
+            <HBox alignment="CENTER_LEFT" spacing="11.0" style="-fx-padding: 12px 14px;">
+                <StackPane styleClass="inv-kpi-icon-green">
+                    <SVGPath content="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                             fill="transparent" stroke="#15803D" strokeWidth="1.9" scaleX="0.75" scaleY="0.75"/>
+                </StackPane>
+                <VBox spacing="1.0">
+                    <Label text="Total Products" style="-fx-font-size: 11px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblTotalProductsCount" text="0" style="-fx-font-size: 19px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                </VBox>
+            </HBox>
+        </StackPane>
+
+        <!-- 2. Active Products -->
+        <StackPane fx:id="cardActiveProducts" HBox.hgrow="ALWAYS" styleClass="inv-kpi-card">
+            <SVGPath content="M 0,48 C 45,38 95,12 160,20 L 160,48 Z"
+                     fill="#DBEAFE" opacity="0.55" mouseTransparent="true" StackPane.alignment="BOTTOM_RIGHT"/>
+            <HBox alignment="CENTER_LEFT" spacing="11.0" style="-fx-padding: 12px 14px;">
+                <StackPane styleClass="inv-kpi-icon-blue">
+                    <SVGPath content="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                             fill="transparent" stroke="#2563EB" strokeWidth="1.8" scaleX="0.75" scaleY="0.75"/>
+                </StackPane>
+                <VBox spacing="1.0">
+                    <Label text="Active Products" style="-fx-font-size: 11px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblActiveProductsCount" text="0" style="-fx-font-size: 19px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                </VBox>
+            </HBox>
+        </StackPane>
+
+        <!-- 3. Low Stock -->
+        <StackPane fx:id="cardLowStock" HBox.hgrow="ALWAYS" styleClass="inv-kpi-card">
+            <SVGPath content="M 0,48 C 45,38 95,12 160,20 L 160,48 Z"
+                     fill="#FDE68A" opacity="0.48" mouseTransparent="true" StackPane.alignment="BOTTOM_RIGHT"/>
+            <HBox alignment="CENTER_LEFT" spacing="11.0" style="-fx-padding: 12px 14px;">
+                <StackPane styleClass="inv-kpi-icon-amber">
+                    <SVGPath content="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"
+                             fill="#D97706" scaleX="0.75" scaleY="0.75"/>
+                </StackPane>
+                <VBox spacing="1.0">
+                    <Label text="Low Stock" style="-fx-font-size: 11px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblLowStockCount" text="0" style="-fx-font-size: 19px; -fx-font-weight: 800; -fx-text-fill: #D97706;"/>
+                </VBox>
+            </HBox>
+        </StackPane>
+
+        <!-- 4. Out of Stock -->
+        <StackPane fx:id="cardOutOfStock" HBox.hgrow="ALWAYS" styleClass="inv-kpi-card">
+            <SVGPath content="M 0,48 C 45,38 95,12 160,20 L 160,48 Z"
+                     fill="#FECACA" opacity="0.50" mouseTransparent="true" StackPane.alignment="BOTTOM_RIGHT"/>
+            <HBox alignment="CENTER_LEFT" spacing="11.0" style="-fx-padding: 12px 14px;">
+                <StackPane styleClass="inv-kpi-icon-red">
+                    <SVGPath content="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8 0-1.85.63-3.55 1.69-4.9L16.9 18.31A7.902 7.902 0 0 1 12 20zm6.31-3.1L7.1 5.69A7.902 7.902 0 0 1 12 4c4.42 0 8 3.58 8 8 0 1.85-.63 3.55-1.69 4.9z"
+                             fill="#DC2626" scaleX="0.78" scaleY="0.78"/>
+                </StackPane>
+                <VBox spacing="1.0">
+                    <Label text="Out of Stock" style="-fx-font-size: 11px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblOutOfStockCount" text="0" style="-fx-font-size: 19px; -fx-font-weight: 800; -fx-text-fill: #DC2626;"/>
+                </VBox>
+            </HBox>
+        </StackPane>
+
+        <!-- 5. Stock Value -->
+        <StackPane fx:id="cardStockValue" HBox.hgrow="ALWAYS" styleClass="inv-kpi-card">
+            <SVGPath content="M 0,48 C 45,38 95,12 160,20 L 160,48 Z"
+                     fill="#DDD6FE" opacity="0.50" mouseTransparent="true" StackPane.alignment="BOTTOM_RIGHT"/>
+            <HBox alignment="CENTER_LEFT" spacing="11.0" style="-fx-padding: 12px 14px;">
+                <StackPane styleClass="inv-kpi-icon-purple">
+                    <SVGPath content="M12 3C7.58 3 4 4.79 4 7v10c0 2.21 3.58 4 8 4s8-1.79 8-4V7c0-2.21-3.58-4-8-4zm0 2c3.87 0 6 1.5 6 2s-2.13 2-6 2-6-1.5-6-2 2.13-2 6-2zm6 12c0 .5-2.13 2-6 2s-6-1.5-6-2v-2.23c1.61.78 3.72 1.23 6 1.23s4.39-.45 6-1.23V17zm0-5c0 .5-2.13 2-6 2s-6-1.5-6-2V9.77C7.61 10.55 9.72 11 12 11s4.39-.45 6-1.23V12z"
+                             fill="#7C3AED" scaleX="0.75" scaleY="0.75"/>
+                </StackPane>
+                <VBox spacing="1.0">
+                    <Label text="Stock Value" style="-fx-font-size: 11px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblTotalValuation" text="BDT 0" style="-fx-font-size: 17.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                </VBox>
+            </HBox>
+        </StackPane>
+    </HBox>
+
+    <!-- Search & Filter Toolbar -->
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <HBox fx:id="searchContainer" alignment="CENTER_LEFT" spacing="8.0" HBox.hgrow="ALWAYS" styleClass="inv-search-wrap">
+            <SVGPath content="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                     fill="#64748B" scaleX="0.75" scaleY="0.75"/>
+            <TextField fx:id="txtSearch" promptText="Search products by name, barcode, or SKU..."
+                       onKeyReleased="#onSearchKeyReleased" HBox.hgrow="ALWAYS"
+                       style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 0; -fx-font-size: 12.5px;"/>
+            <Button fx:id="btnClearSearch" onAction="#onClearSearch" visible="false" managed="false"
+                    style="-fx-background-color: #F1F5F9; -fx-background-radius: 10px; -fx-padding: 3 6; -fx-cursor: hand;">
+                <graphic>
+                    <SVGPath content="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                             fill="#64748B" scaleX="0.55" scaleY="0.55"/>
+                </graphic>
+            </Button>
+        </HBox>
+
+        <ComboBox fx:id="cmbCategoryFilter" promptText="All Categories" onAction="#onCategoryFilterChanged"
+                  styleClass="inv-combo" prefWidth="170.0" minWidth="150.0"/>
+
+        <Button fx:id="btnCategories" text="Categories" onAction="#onManageCategories"
+                styleClass="inv-outline-btn" minWidth="-Infinity">
+            <tooltip>
+                <Tooltip text="Manage product categories (পণ্য ক্যাটাগরি ব্যবস্থাপনা)"/>
+            </tooltip>
+            <graphic>
+                <SVGPath content="M10 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"
+                         fill="#475569" scaleX="0.70" scaleY="0.70"/>
+            </graphic>
+        </Button>
+
+        <CheckBox fx:id="chkIncludeArchived" text="Include Archived" onAction="#onToggleIncludeArchived"
+                  minWidth="-Infinity" style="-fx-font-size: 12px; -fx-font-weight: 500; -fx-text-fill: #334155; -fx-cursor: hand;">
+            <tooltip>
+                <Tooltip text="Show archived products in catalog (আর্কাইভকৃত পণ্যসহ দেখুন)"/>
+            </tooltip>
+        </CheckBox>
+
+        <Button fx:id="btnRefresh" text="Refresh" onAction="#onRefresh"
+                styleClass="btn-subtle-refresh" minWidth="-Infinity">
+            <graphic>
+                <SVGPath content="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+                         fill="#475569" scaleX="0.72" scaleY="0.72"/>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <!-- Main Split Content Area -->
+    <HBox spacing="14.0" VBox.vgrow="ALWAYS">
+
+        <!-- Left Card: Product Table + Pagination Footer -->
+        <VBox spacing="10.0" HBox.hgrow="ALWAYS" styleClass="sk-card" style="-fx-padding: 12px 14px;">
+            <TableView fx:id="tblProducts" VBox.vgrow="ALWAYS" styleClass="inv-table">
+                <columns>
+                    <TableColumn fx:id="colRowIndex" text="#" minWidth="28.0" prefWidth="32.0" maxWidth="38.0" sortable="false"/>
+                    <TableColumn fx:id="colName" text="Product Name" minWidth="135.0" prefWidth="175.0"/>
+                    <TableColumn fx:id="colCategory" text="Category" minWidth="62.0" prefWidth="82.0"/>
+                    <TableColumn fx:id="colBarcodeSku" text="Barcode / SKU" minWidth="78.0" prefWidth="94.0"/>
+                    <TableColumn fx:id="colCostPrice" text="Cost Price" minWidth="64.0" prefWidth="72.0"/>
+                    <TableColumn fx:id="colSellingPrice" text="Selling Price" minWidth="66.0" prefWidth="74.0"/>
+                    <TableColumn fx:id="colCurrentStock" text="Current Stock" minWidth="64.0" prefWidth="74.0"/>
+                    <TableColumn fx:id="colStockValue" text="Stock Value" minWidth="68.0" prefWidth="80.0"/>
+                    <TableColumn fx:id="colStatus" text="Status" minWidth="62.0" prefWidth="68.0" maxWidth="84.0"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+                <placeholder>
+                    <VBox alignment="CENTER" spacing="8.0" style="-fx-padding: 40px;">
+                        <Label text="No products found" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                        <Label text="Click '+ Add Product' to record your first inventory item." style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+                </placeholder>
+            </TableView>
+
+            <!-- Pagination Bar -->
+            <HBox alignment="CENTER_LEFT" spacing="10.0" style="-fx-padding: 4px 2px 0 2px; -fx-border-color: #F1F5F9 transparent transparent transparent; -fx-border-width: 1px 0 0 0;">
+                <Label fx:id="lblPaginationSummary" text="Showing 0 of 0 products"
+                       style="-fx-font-size: 11.5px; -fx-font-weight: 500; -fx-text-fill: #64748B;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <HBox fx:id="paginationBox" alignment="CENTER_RIGHT" spacing="5.0"/>
+            </HBox>
+        </VBox>
+
+        <!-- Right Card: Product Detail Inspector & Stock Movement Ledger -->
+        <VBox fx:id="pnlDetailContainer" prefWidth="398.0" minWidth="365.0" maxWidth="440.0" spacing="12.0"
+              styleClass="sk-card" style="-fx-padding: 14px 16px;">
+
+            <!-- Empty Selection Placeholder -->
+            <VBox fx:id="vboxNoSelection" alignment="CENTER" spacing="10.0" VBox.vgrow="ALWAYS" style="-fx-padding: 50px 20px;">
+                <StackPane styleClass="inv-header-badge">
+                    <SVGPath content="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"
+                             fill="transparent" stroke="#15803D" strokeWidth="1.8" scaleX="0.82" scaleY="0.82"/>
+                </StackPane>
+                <Label text="Select a Product" style="-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #334155;"/>
+                <Label text="Choose any item from the product catalog table to inspect stock valuation, threshold status, and auditable movement history."
+                       textAlignment="CENTER" wrapText="true" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+            </VBox>
+
+            <!-- Active Product Detail State -->
+            <VBox fx:id="vboxProductDetails" spacing="12.0" VBox.vgrow="ALWAYS" visible="false" managed="false">
+
+                <!-- Product Header Card -->
+                <HBox alignment="TOP_LEFT" spacing="12.0">
+                    <StackPane prefWidth="54.0" prefHeight="54.0" minWidth="54.0" minHeight="54.0"
+                               style="-fx-background-color: #FFFFFF; -fx-border-color: #E2E8F0; -fx-border-radius: 10px; -fx-background-radius: 10px;">
+                        <ImageView fx:id="imgDetailProduct" fitWidth="44.0" fitHeight="44.0" preserveRatio="true" smooth="true"/>
+                    </StackPane>
+
+                    <VBox spacing="3.0" HBox.hgrow="ALWAYS" minWidth="0.0">
+                        <Label fx:id="lblDetailName" text="Product Name" wrapText="true"
+                               style="-fx-font-size: 16px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                        <Label fx:id="lblDetailCategoryBarcode" text="Category: — | Barcode: —" wrapText="true"
+                               style="-fx-font-size: 11.5px; -fx-text-fill: #475569;"/>
+                        <Label fx:id="lblDetailSkuUnit" text="SKU: —" wrapText="true"
+                               style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+                    </VBox>
+
+                    <MenuButton fx:id="btnDetailMore" styleClass="inv-kebab-btn" minWidth="-Infinity">
+                        <graphic>
+                            <SVGPath content="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                                     fill="#475569" scaleX="0.75" scaleY="0.75"/>
+                        </graphic>
+                        <items>
+                            <MenuItem text="Adjust Stock (+/-)" onAction="#onAdjustStock"/>
+                            <MenuItem text="Edit Selected Movement Note" onAction="#onEditMovementNote"/>
+                            <SeparatorMenuItem/>
+                            <MenuItem text="View Full Stock Movements" onAction="#onViewAllMovements"/>
+                        </items>
+                    </MenuButton>
+                </HBox>
+
+                <!-- 3 Equal-Width Quick Actions (Edit, Archive, Delete) -->
+                <HBox spacing="8.0">
+                    <Button fx:id="btnEditProduct" text="Edit" onAction="#onEditProduct"
+                            maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="inv-detail-action-edit">
+                        <graphic>
+                            <SVGPath content="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"
+                                     fill="#1D4ED8" scaleX="0.65" scaleY="0.65"/>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="btnArchiveProduct" text="Archive" onAction="#onToggleArchive"
+                            maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="inv-detail-action-archive">
+                        <graphic>
+                            <SVGPath content="M20.54 5.23l-1.39-1.68C18.88 3.21 18.47 3 18 3H6c-.47 0-.88.21-1.16.55L3.46 5.23C3.17 5.57 3 6.02 3 6.5V19c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6.5c0-.48-.17-.93-.46-1.27zM12 17.5L6.5 12H10v-2h4v2h3.5L12 17.5zM5.12 5l.81-1h12l.94 1H5.12z"
+                                     fill="#C2410C" scaleX="0.65" scaleY="0.65"/>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="btnDeleteProduct" text="Delete" onAction="#onDeleteProduct"
+                            maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="inv-detail-action-delete">
+                        <graphic>
+                            <SVGPath content="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+                                     fill="#DC2626" scaleX="0.65" scaleY="0.65"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+
+                <!-- 3-Metric Stock & Valuation Strip -->
+                <HBox spacing="10.0" alignment="CENTER" styleClass="inv-metrics-strip">
+                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                        <Label text="Current Stock" style="-fx-font-size: 10.5px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                        <Label fx:id="lblDetailStock" text="0 pcs" style="-fx-font-size: 16px; -fx-font-weight: 800; -fx-text-fill: #15803D;"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL"/>
+                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                        <Label text="Low Stock Threshold" style="-fx-font-size: 10.5px; -fx-font-weight: 600; -fx-text-fill: #64748B;">
+                            <tooltip>
+                                <Tooltip text="Alert triggered when current stock reaches or falls below this level"/>
+                            </tooltip>
+                        </Label>
+                        <Label fx:id="lblDetailThreshold" text="5 pcs" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                    </VBox>
+                    <Separator orientation="VERTICAL"/>
+                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                        <Label text="Stock Value" style="-fx-font-size: 10.5px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                        <Label fx:id="lblDetailValue" text="BDT 0" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #15803D;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Pricing, Margin & Policy Strip -->
+                <VBox spacing="6.0" style="-fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 10px; -fx-background-radius: 10px; -fx-padding: 8 10;">
+                    <HBox spacing="10.0" alignment="CENTER_LEFT">
+                        <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                            <Label text="TP (ট্রেড)" style="-fx-font-size: 9.5px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                            <Label fx:id="lblDetailTp" text="BDT 0" style="-fx-font-size: 12px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                        </VBox>
+                        <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                            <Label text="MRP (সর্বোচ্চ)" style="-fx-font-size: 9.5px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                            <Label fx:id="lblDetailMrp" text="BDT 0" style="-fx-font-size: 12px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                        </VBox>
+                        <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                            <Label text="Avg Cost" style="-fx-font-size: 9.5px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                            <Label fx:id="lblDetailAvgCost" text="BDT 0" style="-fx-font-size: 12px; -fx-font-weight: 800; -fx-text-fill: #334155;"/>
+                        </VBox>
+                        <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                            <Label text="Margin / Markup" style="-fx-font-size: 9.5px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                            <Label fx:id="lblDetailMargin" text="0% / 0%" style="-fx-font-size: 11.5px; -fx-font-weight: 800; -fx-text-fill: #15803D;"/>
+                        </VBox>
+                    </HBox>
+                    <Label fx:id="lblDetailPricingWarning" text="" visible="false" managed="false" wrapText="true"
+                           style="-fx-font-size: 10.5px; -fx-font-weight: 700; -fx-text-fill: #B91C1C; -fx-background-color: #FEF2F2; -fx-padding: 4 7; -fx-background-radius: 6;"/>
+                </VBox>
+
+                <!-- Detail Tabs: Stock Movements & Linked Suppliers -->
+                <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: transparent;">
+                    <Tab text="Stock Movements (মজুদ চলাচল)">
+                        <VBox spacing="6.0" style="-fx-padding: 6 0 0 0;">
+                            <HBox alignment="CENTER_LEFT" spacing="7.0">
+                                <SVGPath content="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"
+                                         fill="#1E293B" scaleX="0.68" scaleY="0.68"/>
+                                <Label text="Stock Movements"
+                                       style="-fx-font-size: 12.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Button fx:id="btnEditMovementNote" text="Edit Note" onAction="#onEditMovementNote"
+                                        style="-fx-background-color: #F8FAFC; -fx-text-fill: #334155; -fx-font-size: 10.5px; -fx-font-weight: 600; -fx-border-color: #CBD5E1; -fx-border-radius: 5; -fx-background-radius: 5; -fx-padding: 2 7; -fx-cursor: hand;"/>
+                                <Button fx:id="btnViewAllMovements" text="View All →" onAction="#onViewAllMovements"
+                                        styleClass="pos-see-all-btn" style="-fx-font-size: 11px; -fx-padding: 2 6;"/>
+                            </HBox>
+                            <TableView fx:id="tblMovements" VBox.vgrow="ALWAYS" styleClass="inv-movements-table">
+                                <columns>
+                                    <TableColumn fx:id="colMoveDate" text="Date" minWidth="68.0" prefWidth="76.0"/>
+                                    <TableColumn fx:id="colMoveType" text="Movement" minWidth="80.0" prefWidth="96.0"/>
+                                    <TableColumn fx:id="colMoveQty" text="Qty" minWidth="40.0" prefWidth="48.0" maxWidth="60.0"/>
+                                    <TableColumn fx:id="colMoveCost" text="Unit Cost" minWidth="60.0" prefWidth="72.0"/>
+                                    <TableColumn fx:id="colMoveNotes" text="Notes" minWidth="75.0" prefWidth="96.0"/>
+                                </columns>
+                                <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                </columnResizePolicy>
+                                <placeholder>
+                                    <VBox alignment="CENTER" spacing="6.0" style="-fx-padding: 24px;">
+                                        <Label text="No stock movements recorded yet." style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                                        <Label text="Opening stock, purchases, sales, and adjustments appear here." style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                                    </VBox>
+                                </placeholder>
+                            </TableView>
+                        </VBox>
+                    </Tab>
+                    <Tab text="Suppliers &amp; TP (সরবরাহকারী)">
+                        <VBox spacing="6.0" style="-fx-padding: 6 0 0 0;">
+                            <Label text="Multiple suppliers can supply this product with independent Trade Prices."
+                                   style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                            <TableView fx:id="tblProductSuppliers" VBox.vgrow="ALWAYS" styleClass="inv-movements-table">
+                                <columns>
+                                    <TableColumn fx:id="colPsSupplier" text="Supplier" minWidth="96.0" prefWidth="118.0"/>
+                                    <TableColumn fx:id="colPsTp" text="Trade Price" minWidth="68.0" prefWidth="76.0"/>
+                                    <TableColumn fx:id="colPsUnit" text="Unit / Pack" minWidth="68.0" prefWidth="78.0"/>
+                                    <TableColumn fx:id="colPsLead" text="MOQ / Lead" minWidth="62.0" prefWidth="70.0"/>
+                                    <TableColumn fx:id="colPsStatus" text="Role" minWidth="58.0" prefWidth="64.0"/>
+                                </columns>
+                                <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                </columnResizePolicy>
+                                <placeholder>
+                                    <VBox alignment="CENTER" spacing="6.0" style="-fx-padding: 24px;">
+                                        <Label text="No suppliers mapped to this product." style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                                        <Label text="Click 'Edit' to link one or more suppliers and trade prices." style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;"/>
+                                    </VBox>
+                                </placeholder>
+                            </TableView>
+                        </VBox>
+                    </Tab>
+                </TabPane>
+            </VBox>
+
+        </VBox>
+    </HBox>
+</VBox>

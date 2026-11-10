@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+
+<ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: -color-surface-bg;"
+            stylesheets="@../css/styles.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.smartkhata.controller.DashboardController">
+
+    <VBox spacing="14.0" styleClass="main-content">
+        <padding>
+            <Insets top="14" right="20" bottom="18" left="20" />
+        </padding>
+
+        <!-- Row 1: Emerald Grocery Welcome Banner -->
+        <StackPane styleClass="welcome-banner" minHeight="84.0" prefHeight="88.0" maxHeight="94.0">
+            <VBox alignment="CENTER_LEFT" spacing="3.0">
+                <padding>
+                    <Insets top="12" right="230" bottom="12" left="24" />
+                </padding>
+                <Label fx:id="lblWelcomeGreeting" text="Good Morning"
+                       style="-fx-font-size: 21px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                <Label fx:id="lblDashboardSubtitle" text="Here's your grocery shop overview for this month."
+                       style="-fx-font-size: 12.5px; -fx-text-fill: #475569;" />
+            </VBox>
+
+            <ImageView fitHeight="84.0" preserveRatio="true" smooth="true" mouseTransparent="true"
+                       StackPane.alignment="BOTTOM_RIGHT">
+                <StackPane.margin>
+                    <Insets right="20" bottom="0" />
+                </StackPane.margin>
+                <image>
+                    <Image url="@../images/grocery/hero_grocery_basket_2x.png" />
+                </image>
+            </ImageView>
+        </StackPane>
+
+        <!-- Row 2: 4 Summary KPI Cards -->
+        <HBox spacing="14.0">
+            <!-- 1. Total Sales -->
+            <VBox styleClass="sk-card" HBox.hgrow="ALWAYS" prefWidth="0.0" minWidth="185.0" spacing="8.0">
+                <HBox alignment="CENTER_LEFT" spacing="11.0">
+                    <ImageView fitWidth="40.0" fitHeight="40.0" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@../images/grocery/sales_cart.png" />
+                        </image>
+                    </ImageView>
+                    <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                        <Label text="Total Sales" style="-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: #64748B;" />
+                        <Label fx:id="totalSalesLabel" text="BDT 0" style="-fx-font-size: 20px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                    </VBox>
+                </HBox>
+                <HBox alignment="BOTTOM_LEFT" spacing="3.0">
+                    <SVGPath fx:id="salesArrowIcon" content="M12 4l-6 6h4v8h4v-8h4l-6-6z" fill="#15803D" scaleX="0.5" scaleY="0.5" />
+                    <Label fx:id="salesGrowthLabel" text="+0.0%" minWidth="-Infinity" style="-fx-text-fill: #15803D; -fx-font-weight: bold; -fx-font-size: 10.5px;" />
+                    <Label text="vs. prev period" style="-fx-text-fill: #64748B; -fx-font-size: 10.5px;" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <ImageView fitWidth="48.0" fitHeight="22.0" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@../images/grocery/kpi_sparkline_sales.png" />
+                        </image>
+                    </ImageView>
+                </HBox>
+            </VBox>
+
+            <!-- 2. Due Collection -->
+            <VBox styleClass="sk-card" HBox.hgrow="ALWAYS" prefWidth="0.0" minWidth="185.0" spacing="8.0">
+                <HBox alignment="CENTER_LEFT" spacing="11.0">
+                    <ImageView fitWidth="40.0" fitHeight="40.0" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@../images/grocery/due_card.png" />
+                        </image>
+                    </ImageView>
+                    <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                        <Label text="Due Collection" style="-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: #64748B;" />
+                        <Label fx:id="dueCollectionLabel" text="BDT 0" style="-fx-font-size: 20px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                    </VBox>
+                </HBox>
+                <HBox alignment="BOTTOM_LEFT" spacing="3.0">
+                    <SVGPath fx:id="collectionArrowIcon" content="M12 4l-6 6h4v8h4v-8h4l-6-6z" fill="#15803D" scaleX="0.5" scaleY="0.5" />
+                    <Label fx:id="collectionGrowthLabel" text="+0.0%" minWidth="-Infinity" style="-fx-text-fill: #15803D; -fx-font-weight: bold; -fx-font-size: 10.5px;" />
+                    <Label text="vs. prev period" style="-fx-text-fill: #64748B; -fx-font-size: 10.5px;" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <ImageView fitWidth="48.0" fitHeight="22.0" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@../images/grocery/kpi_sparkline_due.png" />
+                        </image>
+                    </ImageView>
+                </HBox>
+            </VBox>
+
+            <!-- 3. Expenses -->
+            <VBox styleClass="sk-card" HBox.hgrow="ALWAYS" prefWidth="0.0" minWidth="185.0" spacing="8.0">
+                <HBox alignment="CENTER_LEFT" spacing="11.0">
+                    <ImageView fitWidth="40.0" fitHeight="40.0" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@../images/grocery/expense_receipt.png" />
+                        </image>
+                    </ImageView>
+                    <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                        <Label text="Expenses" style="-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: #64748B;" />
+                        <Label fx:id="expensesLabel" text="BDT 0" style="-fx-font-size: 20px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                    </VBox>
+                </HBox>
+                <HBox alignment="BOTTOM_LEFT" spacing="3.0">
+                    <SVGPath fx:id="expenseArrowIcon" content="M12 4l-6 6h4v8h4v-8h4l-6-6z" fill="#15803D" scaleX="0.5" scaleY="0.5" />
+                    <Label fx:id="expenseGrowthLabel" text="+0.0%" minWidth="-Infinity" style="-fx-text-fill: #15803D; -fx-font-weight: bold; -fx-font-size: 10.5px;" />
+                    <Label text="vs. prev period" style="-fx-text-fill: #64748B; -fx-font-size: 10.5px;" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <ImageView fitWidth="48.0" fitHeight="22.0" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@../images/grocery/kpi_sparkline_expenses.png" />
+                        </image>
+                    </ImageView>
+                </HBox>
+            </VBox>
+
+            <!-- 4. Inventory Value -->
+            <VBox styleClass="sk-card" HBox.hgrow="ALWAYS" prefWidth="0.0" minWidth="185.0" spacing="8.0">
+                <HBox alignment="CENTER_LEFT" spacing="11.0">
+                    <ImageView fitWidth="40.0" fitHeight="40.0" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@../images/grocery/inventory_cube.png" />
+                        </image>
+                    </ImageView>
+                    <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                        <Label text="Inventory Value" style="-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: #64748B;" />
+                        <Label fx:id="inventoryValueLabel" text="BDT 0" style="-fx-font-size: 20px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                    </VBox>
+                </HBox>
+                <HBox alignment="BOTTOM_LEFT" spacing="6.0">
+                    <Label fx:id="stockCountLabel" text="0 items in stock" style="-fx-text-fill: #64748B; -fx-font-size: 10.5px;" />
+                    <Region HBox.hgrow="ALWAYS" />
+                    <ImageView fitWidth="48.0" fitHeight="22.0" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@../images/grocery/kpi_sparkline_inventory.png" />
+                        </image>
+                    </ImageView>
+                </HBox>
+            </VBox>
+        </HBox>
+
+        <!-- Row 3 & Row 4: Asymmetric Two-Column Dashboard Body -->
+        <HBox spacing="14.0">
+            <!-- Left Main Column (~67%): Sales Trend + Recent Transactions -->
+            <VBox spacing="14.0" HBox.hgrow="ALWAYS">
+                <!-- Sales Trend Card -->
+                <VBox styleClass="sk-card" spacing="10.0">
+                    <HBox alignment="CENTER_LEFT" spacing="10.0">
+                        <SVGPath content="M5 9.2h3V19H5zM10.6 5h2.8v14h-2.8zm5.6 8H19v6h-2.8z"
+                                 fill="#15803D" scaleX="0.95" scaleY="0.95" />
+                        <VBox spacing="1.0">
+                            <Label fx:id="lblTrendChartTitle" text="Sales Trend" style="-fx-font-size: 15.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                            <Label fx:id="lblTrendChartSubtitle" text="Daily sales for the selected period." style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;" />
+                        </VBox>
+
+                        <Region HBox.hgrow="ALWAYS" />
+
+                        <!-- Segmented Emerald Toggle Bar -->
+                        <HBox styleClass="trend-toggle-box" spacing="2.0">
+                            <fx:define>
+                                <ToggleGroup fx:id="trendGroup" />
+                            </fx:define>
+                            <ToggleButton fx:id="btnTrendSales" text="Sales" toggleGroup="$trendGroup" selected="true"
+                                          onAction="#onToggleSalesTrend" styleClass="trend-toggle-btn" />
+                            <ToggleButton fx:id="btnTrendCollection" text="Collection" toggleGroup="$trendGroup"
+                                          onAction="#onToggleCollectionTrend" styleClass="trend-toggle-btn" />
+                            <ToggleButton fx:id="btnTrendExpenses" text="Expenses" toggleGroup="$trendGroup"
+                                          onAction="#onToggleExpensesTrend" styleClass="trend-toggle-btn" />
+                        </HBox>
+                    </HBox>
+
+                    <!-- Chart Plot Area + Right Summary Panel -->
+                    <HBox spacing="16.0" alignment="CENTER">
+                        <StackPane HBox.hgrow="ALWAYS" prefHeight="182.0" minHeight="174.0">
+                            <LineChart fx:id="revenueTrendChart" prefHeight="182.0"
+                                       createSymbols="true" legendVisible="false">
+                                <xAxis>
+                                    <CategoryAxis fx:id="xAxis" />
+                                </xAxis>
+                                <yAxis>
+                                    <NumberAxis fx:id="yAxis" lowerBound="0" upperBound="125" tickUnit="25" />
+                                </yAxis>
+                            </LineChart>
+
+                            <!-- Friendly Centered Empty State Overlay when period has 0 trend points -->
+                            <VBox fx:id="trendEmptyOverlay" alignment="CENTER" spacing="6.0" visible="false" managed="false"
+                                  style="-fx-padding: 8 12 18 12;">
+                                <ImageView fitWidth="46.0" fitHeight="46.0" preserveRatio="true" smooth="true">
+                                    <image>
+                                        <Image url="@../images/grocery/empty_sales_basket.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="lblEmptyTrendTitle" text="No sales data yet"
+                                       style="-fx-font-size: 13px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                                <Label fx:id="lblEmptyTrendSubtitle" text="Sales will appear here once you record a sale."
+                                       style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;" />
+                                <Button fx:id="btnEmptyTrendAction" text="+ Add Sale" onAction="#onEmptyTrendAction"
+                                        styleClass="btn-emerald-primary" />
+                            </VBox>
+                        </StackPane>
+
+                        <!-- Right Summary KPI Panel -->
+                        <VBox spacing="10.0" prefWidth="156.0" minWidth="144.0"
+                              style="-fx-padding: 6 0 6 16; -fx-border-color: transparent transparent transparent #EDF2EF; -fx-border-width: 0 0 0 1;">
+                            <VBox spacing="3.0">
+                                <Label fx:id="lblChartMetricTitle" text="Total Sales Volume" style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;" />
+                                <Label fx:id="chartTotalSalesLabel" text="BDT 0" style="-fx-font-size: 17.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                                <Label fx:id="chartGrowthLabel" text="Active Period"
+                                       style="-fx-background-color: #DCFCE7; -fx-text-fill: #15803D; -fx-padding: 2 10; -fx-background-radius: 10; -fx-font-size: 10.5px; -fx-font-weight: 700;" />
+                            </VBox>
+
+                            <Separator opacity="0.5" />
+
+                            <VBox spacing="2.0">
+                                <Label text="Daily Average" style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;" />
+                                <Label fx:id="chartAvgDailySalesLabel" text="BDT 0" style="-fx-font-size: 15.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                            </VBox>
+
+                            <Separator opacity="0.5" />
+
+                            <VBox spacing="2.0">
+                                <Label fx:id="lblChartCountTitle" text="Total Invoices" style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;" />
+                                <Label fx:id="chartTotalInvoicesLabel" text="0" style="-fx-font-size: 15.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                            </VBox>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <!-- Recent Transactions Card -->
+                <VBox styleClass="sk-card" spacing="10.0" VBox.vgrow="ALWAYS">
+                    <HBox alignment="CENTER_LEFT" spacing="8.0">
+                        <SVGPath content="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"
+                                 fill="#15803D" scaleX="0.82" scaleY="0.82" />
+                        <Label text="Recent Transactions" style="-fx-font-size: 15.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Hyperlink text="View All Transactions →" onAction="#onViewAllTransactions"
+                                   style="-fx-text-fill: #15803D; -fx-font-weight: 700; -fx-font-size: 12.5px;" />
+                    </HBox>
+
+                    <TableView fx:id="recentTransactionsTable" prefHeight="182.0" minHeight="168.0" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="colDate" text="Date &amp; Time" prefWidth="135.0" />
+                            <TableColumn fx:id="colCustomer" text="Party / Description" prefWidth="150.0" />
+                            <TableColumn fx:id="colType" text="Type" prefWidth="120.0" />
+                            <TableColumn fx:id="colAmount" text="Amount (BDT)" minWidth="108.0" prefWidth="120.0" style="-fx-alignment: CENTER-RIGHT;" />
+                            <TableColumn fx:id="colStatus" text="Status" prefWidth="88.0" style="-fx-alignment: CENTER;" />
+                        </columns>
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                        </columnResizePolicy>
+                        <placeholder>
+                            <VBox alignment="CENTER" spacing="6.0" style="-fx-padding: 16px;">
+                                <ImageView fitWidth="46.0" fitHeight="46.0" preserveRatio="true" smooth="true">
+                                    <image>
+                                        <Image url="@../images/grocery/empty_transactions_clipboard.png" />
+                                    </image>
+                                </ImageView>
+                                <Label text="No transactions yet" style="-fx-font-size: 13px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                                <Label text="Your sales, purchases and payments will show here." style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;" />
+                            </VBox>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+            </VBox>
+
+            <!-- Right Utility Column (~33%): Outstanding Dues + Low Stock Alerts + Quick Actions -->
+            <VBox spacing="14.0" prefWidth="374.0" minWidth="362.0" maxWidth="405.0">
+                <!-- 1. Outstanding Dues Card -->
+                <VBox styleClass="sk-card, sk-card-clickable" spacing="10.0" onMouseClicked="#onNavigateToDues">
+                    <HBox alignment="CENTER_LEFT" spacing="8.0">
+                        <SVGPath content="M12 3C7.58 3 4 4.79 4 7s3.58 4 8 4 8-1.79 8-4-3.58-4-8-4zm-8 6v3c0 2.21 3.58 4 8 4s8-1.79 8-4V9c0 2.21-3.58 4-8 4s-8-1.79-8-4zm0 5v3c0 2.21 3.58 4 8 4s8-1.79 8-4v-3c0 2.21-3.58 4-8 4s-8-1.79-8-4z"
+                                 fill="#15803D" scaleX="0.80" scaleY="0.80" />
+                        <Label text="Outstanding Dues" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <SVGPath content="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="#64748B" scaleX="0.82" scaleY="0.82" />
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="12.0">
+                        <VBox spacing="4.0" HBox.hgrow="ALWAYS">
+                            <Label fx:id="totalBakiLabel" text="BDT 0"
+                                   style="-fx-font-size: 25px; -fx-font-weight: 800; -fx-text-fill: #0B6E31;" />
+                            <Label fx:id="bakiCustomerCountLabel" text="0 customers with positive due"
+                                   style="-fx-font-size: 12px; -fx-text-fill: #64748B;" />
+                        </VBox>
+                        <ImageView fitWidth="58.0" fitHeight="58.0" preserveRatio="true" smooth="true">
+                            <image>
+                                <Image url="@../images/grocery/outstanding_dues.png" />
+                            </image>
+                        </ImageView>
+                    </HBox>
+                </VBox>
+
+                <!-- 2. Low Stock Alerts Card -->
+                <VBox styleClass="sk-card, sk-card-clickable" spacing="10.0" onMouseClicked="#onNavigateToInventory">
+                    <HBox alignment="CENTER_LEFT" spacing="8.0">
+                        <SVGPath content="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"
+                                 fill="#EA580C" scaleX="0.80" scaleY="0.80" />
+                        <Label text="Low Stock Alerts" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Label fx:id="lowStockBadgeLabel" text="0 items"
+                               style="-fx-background-color: #FFF1E6; -fx-text-fill: #C2410C; -fx-padding: 2 9; -fx-background-radius: 10; -fx-font-weight: bold; -fx-font-size: 11px;" />
+                        <SVGPath content="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" fill="#64748B" scaleX="0.82" scaleY="0.82" />
+                    </HBox>
+
+                    <VBox fx:id="lowStockListContainer" spacing="8.0" minHeight="66.0">
+                        <!-- Dynamically populated by DashboardController -->
+                    </VBox>
+                </VBox>
+
+                <!-- 3. Quick Actions Card (2x2 Pastel Tiles) -->
+                <VBox styleClass="sk-card" spacing="12.0">
+                    <HBox alignment="CENTER_LEFT" spacing="8.0">
+                        <SVGPath content="M7 2v11h3v9l7-12h-4l4-8z" fill="#15803D" scaleX="0.82" scaleY="0.82" />
+                        <Label text="Quick Actions" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                    </HBox>
+
+                    <GridPane hgap="10.0" vgap="10.0">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                            <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                        </columnConstraints>
+
+                        <!-- Add Sale -->
+                        <Button text="Add Sale (বিক্রয়)" onAction="#onQuickAddSale"
+                                styleClass="quick-action-btn, quick-action-sale"
+                                maxWidth="Infinity" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <graphic>
+                                <SVGPath content="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"
+                                         fill="#15803D" scaleX="0.72" scaleY="0.72" />
+                            </graphic>
+                        </Button>
+
+                        <!-- Receive Payment -->
+                        <Button text="Receive Payment" onAction="#onQuickReceivePayment"
+                                styleClass="quick-action-btn, quick-action-payment"
+                                maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <graphic>
+                                <SVGPath content="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"
+                                         fill="#0D9488" scaleX="0.72" scaleY="0.72" />
+                            </graphic>
+                        </Button>
+
+                        <!-- Add Expense -->
+                        <Button text="Add Expense (খরচ)" onAction="#onQuickAddExpense"
+                                styleClass="quick-action-btn, quick-action-expense"
+                                maxWidth="Infinity" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <graphic>
+                                <SVGPath content="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2z"
+                                         fill="#EA580C" scaleX="0.72" scaleY="0.72" />
+                            </graphic>
+                        </Button>
+
+                        <!-- Add Customer -->
+                        <Button text="Add Customer" onAction="#onQuickAddCustomer"
+                                styleClass="quick-action-btn, quick-action-customer"
+                                maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <graphic>
+                                <SVGPath content="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                                         fill="#4F46E5" scaleX="0.72" scaleY="0.72" />
+                            </graphic>
+                        </Button>
+                    </GridPane>
+                </VBox>
+            </VBox>
+        </HBox>
+    </VBox>
+</ScrollPane>

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgTea" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ECFDF5"/>
+      <stop offset="100%" stop-color="#D1FAE5"/>
+    </linearGradient>
+    <linearGradient id="teaBox" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#059669"/>
+      <stop offset="100%" stop-color="#065F46"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="116" height="116" rx="22" fill="url(#bgTea)" stroke="#A7F3D0" stroke-width="2"/>
+  <ellipse cx="64" cy="110" rx="35" ry="5" fill="#064E3B" opacity="0.18"/>
+  <!-- Tea Carton -->
+  <rect x="30" y="23" width="64" height="83" rx="9" fill="url(#teaBox)" stroke="#064E3B" stroke-width="1.8"/>
+  <rect x="30" y="23" width="64" height="15" rx="6" fill="#047857"/>
+  <!-- Gold Accent Line -->
+  <rect x="38" y="45" width="48" height="44" rx="8" fill="#F0FDF4" stroke="#FBBF24" stroke-width="1.8"/>
+  <!-- Tea Leaves Emblem -->
+  <path d="M62,74 C52,72 48,63 51,54 C60,54 66,61 62,74 Z" fill="#16A34A"/>
+  <path d="M63,75 C73,72 78,64 74,56 C66,57 61,63 63,75 Z" fill="#008A32"/>
+  <line x1="62" y1="62" x2="62" y2="82" stroke="#064E3B" stroke-width="2" stroke-linecap="round"/>
+  <!-- Teacup Front Accent -->
+  <path d="M74,82 L106,82 C105,96 97,104 90,104 C82,104 75,96 74,82 Z" fill="#FFFFFF" stroke="#065F46" stroke-width="1.8"/>
+  <path d="M105,86 C111,86 112,94 104,95" fill="none" stroke="#065F46" stroke-width="2.2" stroke-linecap="round"/>
+</svg>
+

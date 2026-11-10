@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.smartkhata.controller.PurchaseOrdersController"
+      spacing="12.0" style="-fx-padding: 14 0 0 0;">
+
+    <!-- Search, Date Range, Status Filter & Action Toolbar -->
+    <VBox spacing="8.0">
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <TextField fx:id="txtPoSearch" promptText="Search PO# or supplier name..." onKeyReleased="#onSearch"
+                       HBox.hgrow="ALWAYS"
+                       style="-fx-pref-height: 36px; -fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 12;"/>
+            <ComboBox fx:id="cmbPoDateRange" onAction="#onDatePresetChanged" prefWidth="148.0"
+                      style="-fx-pref-height: 36px; -fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8;"/>
+            <ComboBox fx:id="cmbPoStatus" onAction="#onFilterChanged" prefWidth="168.0"
+                      style="-fx-pref-height: 36px; -fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8;"/>
+            <Button fx:id="btnPoClearFilters" text="Clear Filters" onAction="#onClearFilters"
+                    visible="false" managed="false"
+                    style="-fx-background-color: #FEF3C7; -fx-text-fill: #92400E; -fx-border-color: #FCD34D; -fx-border-radius: 8; -fx-background-radius: 8; -fx-pref-height: 36px; -fx-padding: 0 12; -fx-cursor: hand; -fx-font-weight: 700;"/>
+            <Button fx:id="btnPoRefresh" text="Refresh" onAction="#onRefresh"
+                    style="-fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-pref-height: 36px; -fx-padding: 0 14; -fx-cursor: hand; -fx-font-weight: 600;"/>
+            <Button fx:id="btnNewPo" text="+ New Purchase Order (নতুন PO)" onAction="#onNewPurchaseOrder"
+                    style="-fx-background-color: #0E7B3A; -fx-text-fill: white; -fx-font-weight: 700; -fx-pref-height: 36px; -fx-padding: 0 16; -fx-background-radius: 8; -fx-cursor: hand;"/>
+        </HBox>
+
+        <!-- Custom Date Range & PO Summary Strip -->
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <HBox fx:id="boxCustomDateRange" alignment="CENTER_LEFT" spacing="8.0" visible="false" managed="false">
+                <Label text="From:" style="-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                <DatePicker fx:id="dpPoStart" onAction="#onCustomDateChanged" prefWidth="135.0" promptText="Start date"/>
+                <Label text="To:" style="-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                <DatePicker fx:id="dpPoEnd" onAction="#onCustomDateChanged" prefWidth="135.0" promptText="End date"/>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="6.0"
+                  style="-fx-background-color: #FFFFFF; -fx-padding: 5 12; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                <Label text="PO Count:" style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+                <Label fx:id="lblPoCount" text="0" style="-fx-font-size: 12.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="6.0"
+                  style="-fx-background-color: #ECFDF5; -fx-padding: 5 12; -fx-background-radius: 8; -fx-border-color: #A7F3D0; -fx-border-radius: 8;">
+                <Label text="Open / Pending Receipt:" style="-fx-font-size: 11.5px; -fx-font-weight: 600; -fx-text-fill: #065F46;"/>
+                <Label fx:id="lblPoOpenCount" text="0" style="-fx-font-size: 12.5px; -fx-font-weight: 800; -fx-text-fill: #047857;"/>
+            </HBox>
+
+            <HBox alignment="CENTER_LEFT" spacing="6.0"
+                  style="-fx-background-color: #FFFFFF; -fx-padding: 5 12; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                <Label text="Order Value:" style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+                <Label fx:id="lblPoTotalValue" text="BDT 0" style="-fx-font-size: 12.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+            </HBox>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <Label fx:id="lblPoFilterStatus" text="Showing all dates"
+                   style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+        </HBox>
+    </VBox>
+
+    <!-- Main Split: PO Directory Table | Selected PO Detail -->
+    <HBox spacing="14.0" VBox.vgrow="ALWAYS">
+
+        <!-- Left Card: Purchase Orders Directory -->
+        <VBox spacing="10.0" HBox.hgrow="ALWAYS" styleClass="sk-card">
+            <TableView fx:id="tblOrders" VBox.vgrow="ALWAYS" styleClass="table-view, compact-table">
+                <columns>
+                    <TableColumn fx:id="colPoNumber" text="PO Number" prefWidth="135.0"/>
+                    <TableColumn fx:id="colPoDate" text="PO Date" prefWidth="120.0"/>
+                    <TableColumn fx:id="colPoSupplier" text="Supplier" prefWidth="165.0"/>
+                    <TableColumn fx:id="colPoExpected" text="Expected" prefWidth="95.0"/>
+                    <TableColumn fx:id="colPoProgress" text="Received" prefWidth="82.0"/>
+                    <TableColumn fx:id="colPoTotal" text="Grand Total" prefWidth="110.0"/>
+                    <TableColumn fx:id="colPoStatus" text="Status" prefWidth="135.0"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+        </VBox>
+
+        <!-- Right Card: PO Details -->
+        <VBox prefWidth="535.0" minWidth="445.0" maxWidth="620.0" spacing="12.0" styleClass="sk-card">
+
+            <VBox fx:id="vboxPoNoSelection" alignment="CENTER" spacing="10.0" VBox.vgrow="ALWAYS" style="-fx-padding: 50 20;">
+                <SVGPath content="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"
+                         fill="#CBD5E1" scaleX="2.0" scaleY="2.0"/>
+                <Label text="Select a Purchase Order" style="-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #64748B;"/>
+                <Label text="Inspect line items, supplier trade prices, expected delivery, confirm drafts, create GRN, or export PO PDF."
+                       textAlignment="CENTER" wrapText="true" style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+            </VBox>
+
+            <VBox fx:id="vboxPoDetail" spacing="10.0" VBox.vgrow="ALWAYS" visible="false" managed="false">
+                <VBox spacing="3.0">
+                    <HBox alignment="CENTER_LEFT" spacing="8.0">
+                        <Label fx:id="lblDetailPoNumber" text="PO-20261110-0001"
+                               style="-fx-font-size: 17px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                        <Label fx:id="lblDetailPoStatus" text="CONFIRMED"
+                               style="-fx-background-color: #DCFCE7; -fx-text-fill: #15803D; -fx-font-size: 11px; -fx-font-weight: 700; -fx-padding: 2 8; -fx-background-radius: 6;"/>
+                    </HBox>
+                    <Label fx:id="lblDetailPoMeta" text="Supplier: — | Expected: —" wrapText="true"
+                           style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblDetailPoNotes" text="" wrapText="true" visible="false" managed="false"
+                           style="-fx-font-size: 11.5px; -fx-text-fill: #475569; -fx-background-color: #F8FAFC; -fx-padding: 5 8; -fx-background-radius: 6;"/>
+                </VBox>
+
+                <!-- Action Buttons -->
+                <HBox spacing="7.0" alignment="CENTER_LEFT">
+                    <Button fx:id="btnConfirmPo" text="Confirm PO" onAction="#onConfirmPo"
+                            style="-fx-background-color: #0E7B3A; -fx-text-fill: white; -fx-font-weight: 700; -fx-padding: 6 10; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                    <Button fx:id="btnCreateGrnFromPo" text="Create GRN" onAction="#onCreateGrnFromPo"
+                            style="-fx-background-color: #E8F8EA; -fx-text-fill: #075C32; -fx-font-weight: 700; -fx-border-color: #A7F3D0; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 5 10; -fx-cursor: hand;"/>
+                    <Button fx:id="btnEditPo" text="Edit Draft" onAction="#onEditDraftPo"
+                            style="-fx-background-color: #EFF6FF; -fx-text-fill: #1D4ED8; -fx-font-weight: 700; -fx-border-color: #BFDBFE; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 5 10; -fx-cursor: hand;"/>
+                    <Button fx:id="btnExportPoPdf" text="Export PDF" onAction="#onExportPoPdf"
+                            style="-fx-background-color: #F8FAFC; -fx-text-fill: #1E293B; -fx-font-weight: 700; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 5 10; -fx-cursor: hand;"/>
+                    <Button fx:id="btnClosePo" text="Close" onAction="#onClosePo"
+                            style="-fx-background-color: #FEF3C7; -fx-text-fill: #92400E; -fx-font-weight: 700; -fx-border-color: #FDE68A; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 5 9; -fx-cursor: hand;"/>
+                    <Button fx:id="btnCancelPo" text="Cancel" onAction="#onCancelPo"
+                            style="-fx-background-color: #FEF2F2; -fx-text-fill: #DC2626; -fx-font-weight: 700; -fx-border-color: #FECACA; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 5 9; -fx-cursor: hand;"/>
+                </HBox>
+
+                <!-- Financials Strip -->
+                <HBox spacing="12.0" alignment="CENTER"
+                      style="-fx-background-color: #F8FAFC; -fx-padding: 8 12; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                    <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                        <Label text="SUBTOTAL" style="-fx-font-size: 9.5px; -fx-font-weight: 700; -fx-text-fill: #64748B;"/>
+                        <Label fx:id="lblDetailSubtotal" text="BDT 0" style="-fx-font-size: 13px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                    </VBox>
+                    <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                        <Label text="DISC / TAX / CHG" style="-fx-font-size: 9.5px; -fx-font-weight: 700; -fx-text-fill: #64748B;"/>
+                        <Label fx:id="lblDetailAdjustments" text="BDT 0" style="-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #475569;"/>
+                    </VBox>
+                    <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                        <Label text="GRAND TOTAL" style="-fx-font-size: 9.5px; -fx-font-weight: 700; -fx-text-fill: #15803D;"/>
+                        <Label fx:id="lblDetailGrandTotal" text="BDT 0" style="-fx-font-size: 14px; -fx-font-weight: 800; -fx-text-fill: #15803D;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Ordered Line Items Table -->
+                <TableView fx:id="tblPoItems" VBox.vgrow="ALWAYS" styleClass="table-view, compact-table">
+                    <columns>
+                        <TableColumn fx:id="colLineProduct" text="Product" prefWidth="145.0"/>
+                        <TableColumn fx:id="colLineUnit" text="Unit" prefWidth="68.0"/>
+                        <TableColumn fx:id="colLineOrd" text="Ord / Rec" prefWidth="66.0"/>
+                        <TableColumn fx:id="colLineRem" text="Rem" prefWidth="48.0"/>
+                        <TableColumn fx:id="colLineTp" text="Trade Price" prefWidth="78.0"/>
+                        <TableColumn fx:id="colLineTotal" text="Line Total" prefWidth="84.0"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+            </VBox>
+        </VBox>
+    </HBox>
+</VBox>

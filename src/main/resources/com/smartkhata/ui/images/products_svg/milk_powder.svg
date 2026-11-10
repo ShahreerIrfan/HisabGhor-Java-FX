@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgMilk" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ECFEFF"/>
+      <stop offset="100%" stop-color="#CFFAFE"/>
+    </linearGradient>
+    <linearGradient id="milkTin" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="60%" stop-color="#F8FAFC"/>
+      <stop offset="100%" stop-color="#E2E8F0"/>
+    </linearGradient>
+    <linearGradient id="milkLid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38BDF8"/>
+      <stop offset="100%" stop-color="#0284C7"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="116" height="116" rx="22" fill="url(#bgMilk)" stroke="#A5F3FC" stroke-width="2"/>
+  <ellipse cx="64" cy="110" rx="34" ry="5" fill="#0E7490" opacity="0.18"/>
+  <!-- Canister -->
+  <rect x="33" y="31" width="62" height="75" rx="9" fill="url(#milkTin)" stroke="#94A3B8" stroke-width="1.8"/>
+  <rect x="30" y="23" width="68" height="13" rx="5" fill="url(#milkLid)" stroke="#0369A1" stroke-width="1.6"/>
+  <!-- Blue Dairy Crest Band -->
+  <rect x="33" y="45" width="62" height="40" fill="#0EA5E9" opacity="0.14"/>
+  <circle cx="64" cy="65" r="15" fill="#FFFFFF" stroke="#0284C7" stroke-width="2"/>
+  <!-- Milk Drop Icon -->
+  <path d="M64,54 C69,61 72,64.5 72,68 C72,72.4 68.4,76 64,76 C59.6,76 56,72.4 56,68 C56,64.5 59,61 64,54 Z" fill="#0284C7"/>
+  <circle cx="61.5" cy="67.5" r="1.8" fill="#E0F2FE"/>
+  <rect x="42" y="92" width="44" height="6" rx="3" fill="#008A32"/>
+</svg>
+

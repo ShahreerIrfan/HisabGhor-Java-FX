@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.SVGPath?>
+
+<BorderPane fx:id="rootPane" prefHeight="850.0" prefWidth="1400.0" minHeight="680.0" minWidth="1020.0"
+            stylesheets="@../css/styles.css"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.smartkhata.controller.MainShellController">
+
+    <!-- Full-Height Left Navigation Sidebar -->
+    <left>
+        <VBox fx:id="sidebarPane" styleClass="sidebar" spacing="0">
+            <!-- Deep Emerald Grocery Brand Header -->
+            <StackPane fx:id="sidebarBrandBox" styleClass="sidebar-brand-header" prefHeight="88.0" minHeight="84.0" maxHeight="92.0">
+                <!-- Subtle translucent curved emerald wave at bottom right -->
+                <SVGPath content="M 0,48 C 28,44 52,18 90,10 L 90,48 Z"
+                         fill="#4ADE80" opacity="0.20" StackPane.alignment="BOTTOM_RIGHT" />
+                <SVGPath content="M 16,48 C 44,42 64,28 90,24 L 90,48 Z"
+                         fill="#86EFAC" opacity="0.16" StackPane.alignment="BOTTOM_RIGHT" />
+
+                <HBox alignment="CENTER_LEFT" spacing="11.0">
+                    <padding>
+                        <Insets top="14" right="14" bottom="14" left="18" />
+                    </padding>
+
+                    <!-- Crisp Vector Storefront Brand Mark (White Store + Fresh Lime Awning) -->
+                    <StackPane prefWidth="36.0" prefHeight="34.0" minWidth="36.0" minHeight="34.0">
+                        <!-- Store white base walls -->
+                        <SVGPath content="M4 13h22v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V13z"
+                                 fill="#FFFFFF" />
+                        <!-- Bright lime-green storefront awning -->
+                        <SVGPath content="M2 8l3-5h20l3 5v3a3 3 0 0 1-3 3 3 3 0 0 1-2.5-1.35A3 3 0 0 1 20 14a3 3 0 0 1-2.5-1.35A3 3 0 0 1 15 14a3 3 0 0 1-2.5-1.35A3 3 0 0 1 10 14a3 3 0 0 1-2.5-1.35A3 3 0 0 1 5 14a3 3 0 0 1-3-3V8z"
+                                 fill="#84CC16" />
+                        <!-- Green door & small shop window cutouts -->
+                        <SVGPath content="M10 18h5v11h-5z" fill="#15803D" />
+                        <SVGPath content="M17.5 18h5v5h-5z" fill="#22C55E" />
+                    </StackPane>
+
+                    <VBox spacing="0" alignment="CENTER_LEFT">
+                        <Label text="SmartKhata" styleClass="sidebar-logo-title" />
+                        <Label text="Grocery Shop" styleClass="sidebar-logo-subtitle" />
+                    </VBox>
+                </HBox>
+            </StackPane>
+
+            <!-- Navigation Menu Items -->
+            <VBox spacing="3.0">
+                <padding>
+                    <Insets top="14" right="12" bottom="8" left="12" />
+                </padding>
+
+                <fx:define>
+                    <ToggleGroup fx:id="navGroup" />
+                </fx:define>
+
+                <!-- 1. Dashboard -->
+                <ToggleButton fx:id="navDashboardBtn" toggleGroup="$navGroup" text="Dashboard"
+                              styleClass="nav-btn" onAction="#onNavigateDashboard">
+                    <graphic>
+                        <StackPane prefWidth="20" prefHeight="20" minWidth="20" maxWidth="20">
+                            <SVGPath styleClass="svg-icon" scaleX="0.72" scaleY="0.72"
+                                     content="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+                        </StackPane>
+                    </graphic>
+                </ToggleButton>
+
+                <!-- 2. Customers -->
+                <ToggleButton fx:id="navCustomersBtn" toggleGroup="$navGroup" text="Customers"
+                              styleClass="nav-btn" onAction="#onNavigateCustomers">
+                    <graphic>
+                        <StackPane prefWidth="20" prefHeight="20" minWidth="20" maxWidth="20">
+                            <SVGPath styleClass="svg-icon" scaleX="0.72" scaleY="0.72"
+                                     content="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z" />
+                        </StackPane>
+                    </graphic>
+                </ToggleButton>
+
+                <!-- 3. Suppliers -->
+                <ToggleButton fx:id="navSuppliersBtn" toggleGroup="$navGroup" text="Suppliers"
+                              styleClass="nav-btn" onAction="#onNavigateSuppliers">
+                    <graphic>
+                        <StackPane prefWidth="20" prefHeight="20" minWidth="20" maxWidth="20">
+                            <SVGPath styleClass="svg-icon" scaleX="0.72" scaleY="0.72"
+                                     content="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
+                        </StackPane>
+                    </graphic>
+                </ToggleButton>
+
+                <!-- 4. Sales & POS -->
+                <ToggleButton fx:id="navSalesBtn" toggleGroup="$navGroup" text="Sales &amp; POS"
+                              styleClass="nav-btn" onAction="#onNavigateSales">
+                    <graphic>
+                        <StackPane prefWidth="20" prefHeight="20" minWidth="20" maxWidth="20">
+                            <SVGPath styleClass="svg-icon" scaleX="0.72" scaleY="0.72"
+                                     content="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z" />
+                        </StackPane>
+                    </graphic>
+                </ToggleButton>
+
+                <!-- 5. Purchases -->
+                <ToggleButton fx:id="navPurchasesBtn" toggleGroup="$navGroup" text="Purchases"
+                              styleClass="nav-btn" onAction="#onNavigatePurchases">
+                    <graphic>
+                        <StackPane prefWidth="20" prefHeight="20" minWidth="20" maxWidth="20">
+                            <SVGPath styleClass="svg-icon" scaleX="0.72" scaleY="0.72"
+                                     content="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z" />
+                        </StackPane>
+                    </graphic>
+                </ToggleButton>
+
+                <!-- 6. Payments -->
+                <ToggleButton fx:id="navPaymentsBtn" toggleGroup="$navGroup" text="Payments"
+                              styleClass="nav-btn" onAction="#onNavigatePayments">
+                    <graphic>
+                        <StackPane prefWidth="20" prefHeight="20" minWidth="20" maxWidth="20">
+                            <SVGPath styleClass="svg-icon" scaleX="0.72" scaleY="0.72"
+                                     content="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z" />
+                        </StackPane>
+                    </graphic>
+                </ToggleButton>
+
+                <!-- 7. Expenses -->
+                <ToggleButton fx:id="navExpensesBtn" toggleGroup="$navGroup" text="Expenses"
+                              styleClass="nav-btn" onAction="#onNavigateExpenses">
+                    <graphic>
+                        <StackPane prefWidth="20" prefHeight="20" minWidth="20" maxWidth="20">
+                            <SVGPath styleClass="svg-icon" scaleX="0.72" scaleY="0.72"
+                                     content="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2zm0-4H7V7h10v2z" />
+                        </StackPane>
+                    </graphic>
+                </ToggleButton>
+
+                <!-- 8. Inventory -->
+                <ToggleButton fx:id="navInventoryBtn" toggleGroup="$navGroup" text="Inventory"
+                              styleClass="nav-btn" onAction="#onNavigateInventory">
+                    <graphic>
+                        <StackPane prefWidth="20" prefHeight="20" minWidth="20" maxWidth="20">
+                            <SVGPath styleClass="svg-icon" scaleX="0.72" scaleY="0.72"
+                                     content="M20 2H4c-1.1 0-2 .9-2 2v3.01c0 .72.43 1.34 1 1.69V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.7c.57-.35 1-.97 1-1.69V4c0-1.1-.9-2-2-2zm-5 12H9v-2h6v2zm5-7H4V4h16v3z" />
+                        </StackPane>
+                    </graphic>
+                </ToggleButton>
+
+                <!-- 9. Reports -->
+                <ToggleButton fx:id="navReportsBtn" toggleGroup="$navGroup" text="Reports"
+                              styleClass="nav-btn" onAction="#onNavigateReports">
+                    <graphic>
+                        <StackPane prefWidth="20" prefHeight="20" minWidth="20" maxWidth="20">
+                            <SVGPath styleClass="svg-icon" scaleX="0.72" scaleY="0.72"
+                                     content="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z" />
+                        </StackPane>
+                    </graphic>
+                </ToggleButton>
+
+                <!-- 10. Settings -->
+                <ToggleButton fx:id="navSettingsBtn" toggleGroup="$navGroup" text="Settings"
+                              styleClass="nav-btn" onAction="#onNavigateSettings">
+                    <graphic>
+                        <StackPane prefWidth="20" prefHeight="20" minWidth="20" maxWidth="20">
+                            <SVGPath styleClass="svg-icon" scaleX="0.72" scaleY="0.72"
+                                     content="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
+                        </StackPane>
+                    </graphic>
+                </ToggleButton>
+            </VBox>
+
+            <Region VBox.vgrow="ALWAYS" />
+
+            <!-- Bottom Decorative Grocery Landscape & Bag Illustration -->
+            <StackPane alignment="BOTTOM_CENTER" minHeight="110.0" prefHeight="148.0" maxHeight="168.0" mouseTransparent="true">
+                <ImageView fitWidth="221.0" preserveRatio="true" smooth="true" StackPane.alignment="BOTTOM_CENTER">
+                    <image>
+                        <Image url="@../images/grocery/sidebar_green_landscape.png" />
+                    </image>
+                </ImageView>
+                <ImageView fitHeight="134.0" preserveRatio="true" smooth="true" StackPane.alignment="BOTTOM_CENTER">
+                    <image>
+                        <Image url="@../images/grocery/sidebar_grocery_bag_2x.png" />
+                    </image>
+                </ImageView>
+            </StackPane>
+        </VBox>
+    </left>
+
+    <!-- Right Workspace: Top Header + Center Content Body -->
+    <center>
+        <BorderPane>
+            <!-- Top Header Bar -->
+            <top>
+                <HBox styleClass="top-header" spacing="14.0" alignment="CENTER_LEFT">
+                    <!-- Search Bar with Shortcut -->
+                    <HBox alignment="CENTER_LEFT" styleClass="search-field" spacing="9.0">
+                        <SVGPath content="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+                                 fill="#64748B" scaleX="0.72" scaleY="0.72" />
+                        <TextField fx:id="globalSearchField" promptText="Search customers, invoices, products..."
+                                   style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 0;" HBox.hgrow="ALWAYS" />
+                        <Label text="Ctrl + K"
+                               style="-fx-background-color: #F1F5F9; -fx-border-color: #E2E8F0; -fx-border-radius: 5; -fx-background-radius: 5; -fx-text-fill: #64748B; -fx-padding: 2 7; -fx-font-size: 10.5px; -fx-font-weight: bold;" />
+                    </HBox>
+
+                    <Region HBox.hgrow="ALWAYS" />
+
+                    <!-- Interactive Date Range Selector -->
+                    <Button fx:id="btnDateRange" text="This Month" styleClass="header-date-btn" onAction="#onDateRangeClicked">
+                        <graphic>
+                            <SVGPath content="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"
+                                     fill="#1E293B" scaleX="0.72" scaleY="0.72" />
+                        </graphic>
+                    </Button>
+
+                    <!-- Interactive Notification Bell with Live Alert Dot -->
+                    <StackPane>
+                        <Button fx:id="btnNotifications" styleClass="header-icon-btn" onAction="#onNotificationsClicked">
+                            <graphic>
+                                <SVGPath content="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"
+                                         fill="#334155" scaleX="0.74" scaleY="0.74" />
+                            </graphic>
+                        </Button>
+                        <Circle fx:id="notificationDot" radius="4.0" fill="#DC2626" visible="false" mouseTransparent="true"
+                                StackPane.alignment="TOP_RIGHT" translateX="-6" translateY="6" />
+                    </StackPane>
+
+                    <!-- User Store Profile -->
+                    <HBox fx:id="userProfileBox" onMouseClicked="#onUserProfileMenu"
+                          spacing="10.0" alignment="CENTER_LEFT" styleClass="user-profile-pill">
+                        <StackPane prefWidth="36.0" prefHeight="36.0"
+                                   style="-fx-background-color: #DCFCE7; -fx-background-radius: 18; -fx-border-color: #BBF7D0; -fx-border-radius: 18;">
+                            <Label fx:id="userInitialsLabel" text="SK" style="-fx-text-fill: #15803D; -fx-font-weight: 800; -fx-font-size: 13px;" />
+                        </StackPane>
+                        <VBox spacing="0" alignment="CENTER_LEFT">
+                            <Label fx:id="storeNameLabel" text="SmartKhata Store" style="-fx-font-weight: 700; -fx-font-size: 13px; -fx-text-fill: #0F172A;" />
+                            <Label fx:id="storeRoleLabel" text="Business Owner" style="-fx-font-size: 11px; -fx-text-fill: #64748B;" />
+                        </VBox>
+                        <SVGPath content="M7 10l5 5 5-5z" fill="#64748B" scaleX="0.75" scaleY="0.75" />
+                    </HBox>
+                </HBox>
+            </top>
+
+            <!-- Center Content Body (Managed by ViewRouter) -->
+            <center>
+                <StackPane fx:id="contentArea" styleClass="main-content" />
+            </center>
+        </BorderPane>
+    </center>
+</BorderPane>

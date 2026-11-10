@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.smartkhata.controller.ExpensesController"
+      spacing="16.0" style="-fx-background-color: -color-surface-bg;" styleClass="main-content">
+    <padding>
+        <Insets top="20.0" right="24.0" bottom="24.0" left="24.0"/>
+    </padding>
+
+    <!-- Top Header Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="16.0">
+        <VBox spacing="2.0">
+            <Label text="Expenses &amp; Other Income (খরচ ও অন্যান্য আয় খাতা)"
+                   style="-fx-font-size: 20px; -fx-font-weight: 800; -fx-text-fill: #1E293B;"/>
+            <Label text="Daily business overhead, categorized expense logs, service/scrap receipts, and auditable reversals."
+                   style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+        </VBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <!-- Total Expenses Pill -->
+        <HBox alignment="CENTER_LEFT" spacing="8.0"
+              style="-fx-background-color: #FEF2F2; -fx-padding: 8 16; -fx-background-radius: 8; -fx-border-color: #FECACA; -fx-border-radius: 8;">
+            <Label text="Total Expenses (খরচ):" style="-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: #991B1B;"/>
+            <Label fx:id="lblTotalExpenses" text="BDT 0.00" style="-fx-font-size: 14px; -fx-font-weight: 800; -fx-text-fill: #DC2626;"/>
+        </HBox>
+
+        <!-- Total Other Income Pill -->
+        <HBox alignment="CENTER_LEFT" spacing="8.0"
+              style="-fx-background-color: #F0FDF4; -fx-padding: 8 16; -fx-background-radius: 8; -fx-border-color: #86EFAC; -fx-border-radius: 8;">
+            <Label text="Other Income (অন্যান্য আয়):" style="-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: #166534;"/>
+            <Label fx:id="lblTotalOtherIncome" text="BDT 0.00" style="-fx-font-size: 14px; -fx-font-weight: 800; -fx-text-fill: #15803D;"/>
+        </HBox>
+
+        <!-- Net Flow Pill -->
+        <HBox alignment="CENTER_LEFT" spacing="8.0"
+              style="-fx-background-color: #EFF6FF; -fx-padding: 8 16; -fx-background-radius: 8; -fx-border-color: #BFDBFE; -fx-border-radius: 8;">
+            <Label text="Net Aux Flow (ব্যালেন্স):" style="-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: #1E40AF;"/>
+            <Label fx:id="lblNetFlow" text="BDT 0.00" style="-fx-font-size: 14px; -fx-font-weight: 800; -fx-text-fill: #2563EB;"/>
+        </HBox>
+
+        <!-- Record Expense Button -->
+        <Button fx:id="btnRecordExpense" text="+ Record Expense (খরচ লিখুন)" onAction="#onRecordExpense"
+                style="-fx-background-color: #EF4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 9 16; -fx-background-radius: 8; -fx-cursor: hand;"/>
+
+        <!-- Record Other Income Button -->
+        <Button fx:id="btnRecordOtherIncome" text="+ Other Income (অন্যান্য আয়)" onAction="#onRecordOtherIncome"
+                style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 9 16; -fx-background-radius: 8; -fx-cursor: hand;"/>
+    </HBox>
+
+    <!-- Main Navigation Tabs -->
+    <TabPane fx:id="tabPane" VBox.vgrow="ALWAYS" styleClass="tab-pane-flat" tabClosingPolicy="UNAVAILABLE">
+        
+        <!-- Tab 1: Operational Expenses -->
+        <Tab text="Operational Expenses (ব্যবসায়িক খরচ)">
+            <VBox spacing="12.0" style="-fx-padding: 16 0 0 0;">
+                <!-- Filter Bar -->
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <TextField fx:id="txtExpenseSearch" promptText="Search expense by payee or note..."
+                               onKeyReleased="#onExpenseSearchKeyReleased" HBox.hgrow="ALWAYS"
+                               style="-fx-pref-height: 38px; -fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 12;"/>
+
+                    <ComboBox fx:id="cmbExpenseCategory" promptText="All Categories" onAction="#onExpenseFilterChanged"
+                              style="-fx-pref-height: 38px; -fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-pref-width: 160px;"/>
+
+                    <ComboBox fx:id="cmbExpenseMethod" promptText="All Methods" onAction="#onExpenseFilterChanged"
+                              style="-fx-pref-height: 38px; -fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-pref-width: 140px;"/>
+
+                    <DatePicker fx:id="dpExpenseStartDate" promptText="Start Date" onAction="#onExpenseFilterChanged"
+                                style="-fx-pref-height: 38px; -fx-background-color: white; -fx-pref-width: 140px;"/>
+
+                    <DatePicker fx:id="dpExpenseEndDate" promptText="End Date" onAction="#onExpenseFilterChanged"
+                                style="-fx-pref-height: 38px; -fx-background-color: white; -fx-pref-width: 140px;"/>
+
+                    <Button fx:id="btnResetExpenseFilter" text="Reset" onAction="#onResetExpenseFilter"
+                            style="-fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-pref-height: 38px; -fx-padding: 0 16; -fx-cursor: hand;"/>
+                </HBox>
+
+                <!-- Expenses Table -->
+                <TableView fx:id="tblExpenses" VBox.vgrow="ALWAYS" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="colExpDate" text="Date &amp; Time" prefWidth="150"/>
+                        <TableColumn fx:id="colExpCategory" text="Category" prefWidth="130"/>
+                        <TableColumn fx:id="colExpPayee" text="Payee / Recipient" prefWidth="180"/>
+                        <TableColumn fx:id="colExpMethod" text="Payment Method" prefWidth="120"/>
+                        <TableColumn fx:id="colExpAmount" text="Amount (BDT)" prefWidth="130" style="-fx-alignment: CENTER-RIGHT;"/>
+                        <TableColumn fx:id="colExpNotes" text="Notes" prefWidth="220"/>
+                        <TableColumn fx:id="colExpStatus" text="Status" prefWidth="95"/>
+                        <TableColumn fx:id="colExpActions" text="Action" prefWidth="150"/>
+                    </columns>
+                    <placeholder>
+                        <VBox alignment="CENTER" spacing="8.0" style="-fx-padding: 40px;">
+                            <Label text="No expense records found" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                            <Label text="Click '+ Record Expense' above to log operational business costs." style="-fx-font-size: 13px; -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+                    </placeholder>
+                </TableView>
+            </VBox>
+        </Tab>
+
+        <!-- Tab 2: Other Business Income -->
+        <Tab text="Other Income (অন্যান্য আয়)">
+            <VBox spacing="12.0" style="-fx-padding: 16 0 0 0;">
+                <!-- Filter Bar -->
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <TextField fx:id="txtIncomeSearch" promptText="Search other income by source or note..."
+                               onKeyReleased="#onIncomeSearchKeyReleased" HBox.hgrow="ALWAYS"
+                               style="-fx-pref-height: 38px; -fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 12;"/>
+
+                    <DatePicker fx:id="dpIncomeStartDate" promptText="Start Date" onAction="#onIncomeFilterChanged"
+                                style="-fx-pref-height: 38px; -fx-background-color: white; -fx-pref-width: 140px;"/>
+
+                    <DatePicker fx:id="dpIncomeEndDate" promptText="End Date" onAction="#onIncomeFilterChanged"
+                                style="-fx-pref-height: 38px; -fx-background-color: white; -fx-pref-width: 140px;"/>
+
+                    <Button fx:id="btnResetIncomeFilter" text="Reset" onAction="#onResetIncomeFilter"
+                            style="-fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-pref-height: 38px; -fx-padding: 0 16; -fx-cursor: hand;"/>
+                </HBox>
+
+                <!-- Other Income Table -->
+                <TableView fx:id="tblOtherIncomes" VBox.vgrow="ALWAYS" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="colIncDate" text="Date &amp; Time" prefWidth="150"/>
+                        <TableColumn fx:id="colIncSource" text="Source / Particulars" prefWidth="200"/>
+                        <TableColumn fx:id="colIncMethod" text="Payment Method" prefWidth="120"/>
+                        <TableColumn fx:id="colIncAmount" text="Amount (BDT)" prefWidth="130" style="-fx-alignment: CENTER-RIGHT;"/>
+                        <TableColumn fx:id="colIncNotes" text="Notes" prefWidth="250"/>
+                        <TableColumn fx:id="colIncStatus" text="Status" prefWidth="95"/>
+                        <TableColumn fx:id="colIncActions" text="Action" prefWidth="150"/>
+                    </columns>
+                    <placeholder>
+                        <VBox alignment="CENTER" spacing="8.0" style="-fx-padding: 40px;">
+                            <Label text="No other income records found" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                            <Label text="Click '+ Other Income' above to record non-sale business receipts." style="-fx-font-size: 13px; -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+                    </placeholder>
+                </TableView>
+            </VBox>
+        </Tab>
+
+        <!-- Tab 3: Category Breakdown -->
+        <Tab text="Expense Breakdown (খাতওয়ারী খরচ)">
+            <VBox spacing="12.0" style="-fx-padding: 16 0 0 0;">
+                <TableView fx:id="tblCategoryBreakdown" VBox.vgrow="ALWAYS" styleClass="table-view">
+                    <columns>
+                        <TableColumn fx:id="colBreakdownCategory" text="Category (খাত)" prefWidth="220"/>
+                        <TableColumn fx:id="colBreakdownCount" text="Transaction Count (ভাউচার সংখ্যা)" prefWidth="180" style="-fx-alignment: CENTER;"/>
+                        <TableColumn fx:id="colBreakdownTotal" text="Total Amount (মোট খরচ BDT)" prefWidth="200" style="-fx-alignment: CENTER-RIGHT;"/>
+                    </columns>
+                    <placeholder>
+                        <VBox alignment="CENTER" spacing="8.0" style="-fx-padding: 40px;">
+                            <Label text="No category statistics available" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                        </VBox>
+                    </placeholder>
+                </TableView>
+            </VBox>
+        </Tab>
+    </TabPane>
+</VBox>
+

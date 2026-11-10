@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgRice" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#F0FDF4"/>
+      <stop offset="100%" stop-color="#DCFCE7"/>
+    </linearGradient>
+    <linearGradient id="sackGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#F5EFE6"/>
+      <stop offset="50%" stop-color="#FFFDF9"/>
+      <stop offset="100%" stop-color="#E7D8C3"/>
+    </linearGradient>
+    <linearGradient id="bowlGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#16A34A"/>
+      <stop offset="100%" stop-color="#075C32"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="116" height="116" rx="22" fill="url(#bgRice)" stroke="#BBF7D0" stroke-width="2"/>
+  <ellipse cx="64" cy="110" rx="38" ry="5" fill="#075C32" opacity="0.16"/>
+  <!-- Woven Rice Sack -->
+  <path d="M40,24 L68,24 L64,34 L82,42 C87,44 90,50 90,57 L90,98 C90,104 85,108 79,108 L31,108 C25,108 20,104 20,98 L20,57 C20,50 23,44 28,42 L44,34 Z" fill="url(#sackGrad)" stroke="#C8B294" stroke-width="1.8"/>
+  <path d="M39,34 L71,34" stroke="#16A34A" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M30,52 L80,52" stroke="#16A34A" stroke-width="2.5" opacity="0.35"/>
+  <rect x="33" y="60" width="44" height="24" rx="5" fill="#E8F8EA" stroke="#86EFAC" stroke-width="1.4"/>
+  <circle cx="55" cy="72" r="7" fill="#16A34A" opacity="0.22"/>
+  <ellipse cx="55" cy="72" rx="4" ry="2.2" fill="#008A32" transform="rotate(-25 55 72)"/>
+  <!-- Ceramic Bowl of Steamed/Raw Rice in front -->
+  <path d="M52,78 C55,66 66,61 78,61 C90,61 101,66 104,78 Z" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.6"/>
+  <ellipse cx="68" cy="71" rx="3.2" ry="1.5" fill="#CBD5E1" transform="rotate(-18 68 71)"/>
+  <ellipse cx="78" cy="68" rx="3.4" ry="1.5" fill="#CBD5E1" transform="rotate(14 78 68)"/>
+  <ellipse cx="88" cy="72" rx="3.2" ry="1.5" fill="#CBD5E1" transform="rotate(-10 88 72)"/>
+  <ellipse cx="74" cy="74" rx="3.4" ry="1.5" fill="#E2E8F0" transform="rotate(8 74 74)"/>
+  <path d="M48,78 L108,78 C108,97 95,108 78,108 C61,108 48,97 48,78 Z" fill="url(#bowlGrad)" stroke="#064E3B" stroke-width="1.6"/>
+  <rect x="64" y="106" width="28" height="4" rx="2" fill="#064E3B"/>
+  <path d="M56,84 C58,92 63,97 70,100" fill="none" stroke="#86EFAC" stroke-width="2.2" stroke-linecap="round" opacity="0.55"/>
+</svg>
+

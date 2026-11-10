@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="bgOil" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFFBEB"/>
+      <stop offset="100%" stop-color="#FEF3C7"/>
+    </linearGradient>
+    <linearGradient id="oilBody" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="35%" stop-color="#FCD34D"/>
+      <stop offset="75%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="oilCap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#16A34A"/>
+      <stop offset="100%" stop-color="#075C32"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="116" height="116" rx="22" fill="url(#bgOil)" stroke="#FDE68A" stroke-width="2"/>
+  <ellipse cx="64" cy="112" rx="30" ry="5" fill="#D97706" opacity="0.20"/>
+  <!-- Handle & Bottle -->
+  <path d="M84,42 C96,42 100,50 100,64 C100,78 96,86 86,86 L86,77 C90,77 91,72 91,64 C91,56 90,51 84,51 Z" fill="#D97706"/>
+  <path d="M51,24 L73,24 L76,34 L86,44 C90,48 92,54 92,62 L92,98 C92,104 87,108 81,108 L43,108 C37,108 32,104 32,98 L32,62 C32,54 34,48 38,44 L48,34 Z" fill="url(#oilBody)" stroke="#B45309" stroke-width="1.8"/>
+  <!-- Highlight -->
+  <path d="M40,54 L40,98 C40,101 42,102 45,102" fill="none" stroke="#FEF9C3" stroke-width="3.2" stroke-linecap="round" opacity="0.75"/>
+  <!-- Rib lines -->
+  <line x1="35" y1="53" x2="89" y2="53" stroke="#D97706" stroke-width="1.4" opacity="0.45"/>
+  <line x1="35" y1="96" x2="89" y2="96" stroke="#D97706" stroke-width="1.4" opacity="0.45"/>
+  <!-- Cap -->
+  <rect x="49" y="15" width="26" height="11" rx="3.5" fill="url(#oilCap)"/>
+  <rect x="47" y="25" width="30" height="4" rx="2" fill="#064E3B"/>
+  <!-- Front Label -->
+  <rect x="40" y="59" width="44" height="31" rx="6" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="1.4"/>
+  <path d="M40,65 C40,61.7 42.7,59 46,59 L78,59 C81.3,59 84,61.7 84,65 L84,67 L40,67 Z" fill="#008A32"/>
+  <path d="M62,71 C66,76.5 68,79 68,81.5 C68,84.5 65.3,87 62,87 C58.7,87 56,84.5 56,81.5 C56,79 58,76.5 62,71 Z" fill="#F59E0B"/>
+  <circle cx="60" cy="81" r="1.5" fill="#FEF3C7"/>
+  <rect x="47" y="61.5" width="30" height="3" rx="1.5" fill="#E8F8EA"/>
+</svg>
+

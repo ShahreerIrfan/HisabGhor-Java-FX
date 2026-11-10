@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+
+<StackPane stylesheets="@../css/styles.css"
+           style="-fx-background-color: -color-surface-bg;"
+           prefHeight="720.0" prefWidth="1080.0"
+           xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.smartkhata.controller.LoginController">
+
+    <VBox alignment="CENTER" spacing="20" maxWidth="440.0" StackPane.alignment="CENTER">
+        <!-- Logo & Title -->
+        <HBox alignment="CENTER" spacing="12">
+            <StackPane prefWidth="44" prefHeight="44" style="-fx-background-color: -color-brand-primary; -fx-background-radius: 10;">
+                <SVGPath content="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"
+                         fill="white" scaleX="0.9" scaleY="0.9" />
+            </StackPane>
+            <VBox spacing="1">
+                <Label text="SmartKhata" style="-fx-font-size: 24px; -fx-font-weight: 800; -fx-text-fill: -color-brand-primary;" />
+                <Label text="Offline Bookkeeping for Your Business" style="-fx-font-size: 11px; -fx-text-fill: #64748B;" />
+            </VBox>
+        </HBox>
+
+        <!-- Login Card -->
+        <VBox styleClass="sk-card" spacing="16">
+            <VBox spacing="4" alignment="CENTER_LEFT">
+                <Label text="Welcome Back" style="-fx-font-size: 20px; -fx-font-weight: 800; -fx-text-fill: #0F172A;" />
+                <HBox spacing="6" alignment="CENTER_LEFT">
+                    <Label text="Store:" style="-fx-font-size: 12px; -fx-text-fill: #64748B;" />
+                    <Label fx:id="storeNameLabel" text="Mizan Stores" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: -color-brand-primary;" />
+                </HBox>
+            </VBox>
+
+            <!-- Error Banner -->
+            <Label fx:id="errorLabel" text="Invalid credentials" wrapText="true"
+                   style="-fx-background-color: #FEE2E2; -fx-text-fill: #DC2626; -fx-padding: 8 12; -fx-background-radius: 6; -fx-font-weight: bold; -fx-font-size: 12px;" />
+
+            <!-- Input Fields -->
+            <VBox spacing="6">
+                <Label text="Username" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #334155;" />
+                <TextField fx:id="usernameField" promptText="Enter username"
+                           style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-pref-height: 40px; -fx-padding: 0 12;" />
+            </VBox>
+
+            <VBox spacing="6">
+                <Label text="Security PIN or Password" style="-fx-font-size: 12px; -fx-font-weight: bold; -fx-text-fill: #334155;" />
+                <PasswordField fx:id="passwordField" promptText="Enter 4-6 digit PIN or master password"
+                               onAction="#onSignIn"
+                               style="-fx-background-color: #F8FAFC; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-pref-height: 40px; -fx-padding: 0 12;" />
+            </VBox>
+
+            <!-- Action Buttons -->
+            <Button fx:id="signInButton" text="Sign In to SmartKhata" onAction="#onSignIn"
+                    maxWidth="Infinity" prefHeight="44.0"
+                    style="-fx-background-color: -color-brand-primary; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-background-radius: 8; -fx-cursor: hand;" />
+
+            <HBox alignment="CENTER">
+                <Hyperlink text="Forgot PIN? Use Offline Recovery Code" onAction="#onForgotPassword"
+                           style="-fx-text-fill: #64748B; -fx-font-size: 11px;" />
+            </HBox>
+        </VBox>
+
+        <Label text="100% Offline • SQLite WAL Encrypted Local Storage • No Internet Required"
+               style="-fx-font-size: 11px; -fx-text-fill: #94A3B8;" />
+    </VBox>
+</StackPane>
+

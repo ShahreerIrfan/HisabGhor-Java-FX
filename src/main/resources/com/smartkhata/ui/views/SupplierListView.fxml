@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.smartkhata.controller.SupplierListController"
+      spacing="14.0" styleClass="main-content, supplier-page-root">
+    <padding>
+        <Insets top="16.0" right="20.0" bottom="18.0" left="20.0"/>
+    </padding>
+
+    <!-- Top Header Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <!-- Left Title & Subtitle -->
+        <VBox spacing="2.0" minWidth="-Infinity">
+            <Label text="Suppliers &amp; Paona Khata (সরবরাহকারী খাতা)" minWidth="-Infinity"
+                   style="-fx-font-size: 19px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+            <Label text="Manage vendor profiles, purchase balances, and running payable statements." minWidth="-Infinity"
+                   style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+        </VBox>
+
+        <!-- Center Soft Produce & Cartons Illustration (collapses cleanly when space is constrained) -->
+        <StackPane fx:id="headerArtSpacer" HBox.hgrow="ALWAYS" alignment="BOTTOM_CENTER"
+                   minWidth="0.0" prefWidth="0.0" maxHeight="62.0" mouseTransparent="true"
+                   styleClass="supplier-header-glow">
+            <ImageView fitHeight="58.0" fitWidth="100.0" preserveRatio="true" smooth="true" opacity="0.88">
+                <image>
+                    <Image url="@../images/supplier/supplier_cartons_produce_rice_transparent_2x.png"/>
+                </image>
+            </ImageView>
+        </StackPane>
+
+        <!-- Right Metric Chips & Primary CTA -->
+        <HBox alignment="CENTER_RIGHT" spacing="8.0" minWidth="-Infinity">
+            <!-- Total Suppliers Card -->
+            <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="metric-chip-neutral" minWidth="-Infinity"
+                  style="-fx-padding: 7px 12px;">
+                <ImageView fitWidth="28.0" fitHeight="28.0" preserveRatio="true" smooth="true">
+                    <image>
+                        <Image url="@../images/supplier/total_suppliers_tile.png"/>
+                    </image>
+                </ImageView>
+                <VBox spacing="0.0">
+                    <Label text="Total Suppliers:" minWidth="-Infinity" style="-fx-font-size: 10.5px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblTotalSuppliers" text="0" minWidth="-Infinity" style="-fx-font-size: 16.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Total Payables Card -->
+            <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="supplier-payables-chip" minWidth="-Infinity">
+                <ImageView fitWidth="28.0" fitHeight="28.0" preserveRatio="true" smooth="true">
+                    <image>
+                        <Image url="@../images/supplier/total_payables_tile.png"/>
+                    </image>
+                </ImageView>
+                <VBox spacing="0.0">
+                    <Label text="Total Payables (মোট দেনা/পাওনা):" minWidth="-Infinity" style="-fx-font-size: 10.5px; -fx-font-weight: 700; -fx-text-fill: #9A3412;"/>
+                    <Label fx:id="lblTotalPayables" text="BDT 0" minWidth="-Infinity" style="-fx-font-size: 16px; -fx-font-weight: 800; -fx-text-fill: #EA580C;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Add Supplier CTA -->
+            <Button fx:id="btnAddSupplier" text="Add Supplier" onAction="#onAddSupplier"
+                    styleClass="btn-emerald-primary" minWidth="-Infinity" prefHeight="42.0"
+                    style="-fx-background-radius: 10px; -fx-padding: 0 15px; -fx-graphic-text-gap: 7px; -fx-font-size: 12.5px;">
+                <graphic>
+                    <SVGPath content="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#FFFFFF" scaleX="0.75" scaleY="0.75"/>
+                </graphic>
+            </Button>
+        </HBox>
+    </HBox>
+
+    <!-- Search & Filter Toolbar -->
+    <HBox alignment="CENTER_LEFT" spacing="12.0">
+        <HBox fx:id="searchContainer" alignment="CENTER_LEFT" spacing="9.0" HBox.hgrow="ALWAYS"
+              styleClass="search-field" style="-fx-pref-height: 40px; -fx-padding: 0 12px;">
+            <ImageView fitWidth="16.0" fitHeight="16.0" preserveRatio="true" smooth="true">
+                <image>
+                    <Image url="@../images/supplier/search.png"/>
+                </image>
+            </ImageView>
+            <TextField fx:id="txtSearch" promptText="Search suppliers by name, contact person, or phone..."
+                       onKeyReleased="#onSearchKeyReleased" HBox.hgrow="ALWAYS"
+                       style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 0; -fx-font-size: 13px;"/>
+            <Button fx:id="btnClearSearch" onAction="#onClearSearch" visible="false" managed="false"
+                    style="-fx-background-color: #F1F5F9; -fx-background-radius: 10px; -fx-padding: 3 6; -fx-cursor: hand;">
+                <graphic>
+                    <SVGPath content="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                             fill="#64748B" scaleX="0.55" scaleY="0.55"/>
+                </graphic>
+            </Button>
+        </HBox>
+
+        <CheckBox fx:id="chkIncludeArchived" text="Include Archived (আর্কাইভকৃত)"
+                  onAction="#onToggleIncludeArchived" minWidth="-Infinity"
+                  style="-fx-font-size: 12.5px; -fx-font-weight: 500; -fx-text-fill: #334155; -fx-cursor: hand;"/>
+
+        <Button fx:id="btnRefresh" text="Refresh" onAction="#onRefresh"
+                styleClass="btn-subtle-refresh" minWidth="-Infinity">
+            <graphic>
+                <ImageView fitWidth="15.0" fitHeight="15.0" preserveRatio="true" smooth="true">
+                    <image>
+                        <Image url="@../images/supplier/refresh.png"/>
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <!-- Main Content Area: Split Supplier List & Profile/Ledger -->
+    <HBox spacing="14.0" VBox.vgrow="ALWAYS">
+
+        <!-- Left Card: Supplier List -->
+        <VBox spacing="10.0" HBox.hgrow="ALWAYS" styleClass="sk-card" style="-fx-padding: 14px;">
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <ImageView fitWidth="32.0" fitHeight="32.0" preserveRatio="true" smooth="true">
+                    <image>
+                        <Image url="@../images/supplier/supplier_list_tile.png"/>
+                    </image>
+                </ImageView>
+                <VBox spacing="1.0">
+                    <Label text="Supplier List" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                    <Label text="All suppliers and their payable summary" style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+                </VBox>
+            </HBox>
+
+            <TableView fx:id="tblSuppliers" VBox.vgrow="ALWAYS" styleClass="table-view, supplier-table, compact-table">
+                <columns>
+                    <TableColumn fx:id="colName" text="Supplier Name" minWidth="96.0" prefWidth="98.0"/>
+                    <TableColumn fx:id="colContactPerson" text="Contact Person" minWidth="94.0" prefWidth="100.0"/>
+                    <TableColumn fx:id="colPhone" text="Phone Number" minWidth="92.0" prefWidth="98.0"/>
+                    <TableColumn fx:id="colAddress" text="Address" minWidth="56.0" prefWidth="122.0"/>
+                    <TableColumn fx:id="colCurrentPayable" text="Current Payable (পাওনা)" minWidth="144.0" prefWidth="148.0"/>
+                    <TableColumn fx:id="colStatus" text="Status" minWidth="58.0" prefWidth="64.0" style="-fx-alignment: CENTER;"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+                <placeholder>
+                    <VBox alignment="CENTER" spacing="10.0" style="-fx-padding: 40px;">
+                        <ImageView fitWidth="50.0" fitHeight="50.0" preserveRatio="true" smooth="true">
+                            <image>
+                                <Image url="@../images/supplier/supplier_list_tile.png"/>
+                            </image>
+                        </ImageView>
+                        <Label text="No suppliers found" style="-fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: #334155;"/>
+                        <Label text="Click '+ Add Supplier' to register your first wholesale vendor."
+                               style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                    </VBox>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <!-- Right Card: Supplier Details & Paona Ledger Statement -->
+        <VBox fx:id="pnlDetailContainer" prefWidth="456.0" minWidth="428.0" maxWidth="488.0"
+              spacing="12.0" styleClass="sk-card" style="-fx-padding: 14px;">
+
+            <!-- Empty State Placeholder when no supplier is selected -->
+            <VBox fx:id="vboxNoSelection" alignment="CENTER" spacing="12.0" VBox.vgrow="ALWAYS" style="-fx-padding: 50px 24px;">
+                <ImageView fitWidth="52.0" fitHeight="52.0" preserveRatio="true" smooth="true">
+                    <image>
+                        <Image url="@../images/supplier/supplier_profile_tile.png"/>
+                    </image>
+                </ImageView>
+                <Label text="Select a Supplier" style="-fx-font-size: 15.5px; -fx-font-weight: 800; -fx-text-fill: #334155;"/>
+                <Label text="Select a supplier from the directory to view vendor contact details, payables, and full purchase statement history."
+                       textAlignment="CENTER" wrapText="true" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+            </VBox>
+
+            <!-- Active Supplier Details & Ledger (shown when a supplier is selected) -->
+            <VBox fx:id="vboxSupplierDetails" spacing="12.0" VBox.vgrow="ALWAYS" visible="false" managed="false" minWidth="0.0">
+
+                <!-- Profile Header Row -->
+                <HBox alignment="CENTER_LEFT" spacing="9.0" minWidth="0.0">
+                    <ImageView fitWidth="36.0" fitHeight="36.0" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@../images/supplier/supplier_profile_tile.png"/>
+                        </image>
+                    </ImageView>
+
+                    <VBox spacing="2.0" HBox.hgrow="ALWAYS" minWidth="100.0">
+                        <Label fx:id="lblDetailName" text="Supplier Name"
+                               style="-fx-font-size: 17px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                        <Label fx:id="lblDetailContact" text="Contact: — | Phone: — | Address: —" wrapText="true" minHeight="-Infinity"
+                               style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                        <Label fx:id="lblDetailMeta" text="Code: — | Terms: —" wrapText="true" minHeight="-Infinity"
+                               style="-fx-font-size: 10.5px; -fx-font-weight: 600; -fx-text-fill: #15803D;"/>
+                    </VBox>
+
+                    <Button fx:id="btnEditSupplier" text="Edit" onAction="#onEditSupplier"
+                            styleClass="btn-edit-supplier-soft" minWidth="-Infinity" style="-fx-padding: 6px 8px;">
+                        <graphic>
+                            <ImageView fitWidth="13.0" fitHeight="13.0" preserveRatio="true" smooth="true">
+                                <image>
+                                    <Image url="@../images/supplier/pencil.png"/>
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="btnArchiveSupplier" text="Archive" onAction="#onToggleArchive"
+                            styleClass="btn-archive-soft" minWidth="-Infinity" style="-fx-padding: 6px 8px;">
+                        <graphic>
+                            <ImageView fx:id="imgArchiveAction" fitWidth="13.0" fitHeight="13.0" preserveRatio="true" smooth="true">
+                                <image>
+                                    <Image url="@../images/supplier/archive.png"/>
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="btnDeleteSupplier" text="Delete" onAction="#onDeleteSupplier"
+                            minWidth="-Infinity"
+                            style="-fx-background-color: #FEE2E2; -fx-text-fill: #B91C1C; -fx-font-weight: 700; -fx-background-radius: 8px; -fx-padding: 6px 8px; -fx-cursor: hand; -fx-font-size: 12px;">
+                        <graphic>
+                            <SVGPath content="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+                                     fill="#B91C1C" scaleX="0.6" scaleY="0.6"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+
+                <!-- 2 Side-by-Side Financial Metric Cards -->
+                <HBox spacing="8.0" alignment="CENTER" minWidth="0.0">
+                    <!-- Current Payable Card (Warm Peach) -->
+                    <HBox alignment="CENTER_LEFT" spacing="7.0" HBox.hgrow="ALWAYS" prefWidth="0.0" minWidth="0.0"
+                          styleClass="supplier-due-card">
+                        <ImageView fitWidth="26.0" fitHeight="26.0" preserveRatio="true" smooth="true">
+                            <image>
+                                <Image url="@../images/supplier/current_payable_tile.png"/>
+                            </image>
+                        </ImageView>
+                        <VBox spacing="1.0" HBox.hgrow="ALWAYS" minWidth="0.0">
+                            <Label text="Current Payable (দেনা/পাওনা)"
+                                   style="-fx-font-size: 9.8px; -fx-font-weight: 700; -fx-text-fill: #9A3412;"/>
+                            <Label fx:id="lblDetailPayable" text="BDT 0"
+                                   style="-fx-font-size: 16px; -fx-font-weight: 800; -fx-text-fill: #EA580C;"/>
+                        </VBox>
+                    </HBox>
+
+                    <!-- Opening Payable Card (Soft Mint) -->
+                    <HBox alignment="CENTER_LEFT" spacing="7.0" HBox.hgrow="ALWAYS" prefWidth="0.0" minWidth="0.0"
+                          styleClass="supplier-opening-card">
+                        <ImageView fitWidth="26.0" fitHeight="26.0" preserveRatio="true" smooth="true">
+                            <image>
+                                <Image url="@../images/supplier/opening_payable_tile.png"/>
+                            </image>
+                        </ImageView>
+                        <VBox spacing="1.0" HBox.hgrow="ALWAYS" minWidth="0.0">
+                            <Label text="Opening Payable (প্রারম্ভিক)"
+                                   style="-fx-font-size: 9.8px; -fx-font-weight: 700; -fx-text-fill: #334155;"/>
+                            <Label fx:id="lblDetailOpening" text="BDT 0"
+                                   style="-fx-font-size: 16px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                        </VBox>
+                    </HBox>
+                </HBox>
+
+                <!-- Notes Display (conditional) -->
+                <Label fx:id="lblDetailNotes" text="Notes: None" wrapText="true" visible="false" managed="false"
+                       style="-fx-font-size: 11.5px; -fx-text-fill: #475569; -fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 7 10;"/>
+
+                <!-- Detail Tabs: Ledger Statement & Supplied Products -->
+                <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE" style="-fx-background-color: transparent;">
+                    <Tab text="Ledger Statement (খাতা)">
+                        <VBox spacing="6.0" style="-fx-padding: 6 0 0 0;">
+                            <HBox alignment="CENTER_LEFT" spacing="6.0" minWidth="0.0">
+                                <ImageView fitWidth="20.0" fitHeight="20.0" preserveRatio="true" smooth="true">
+                                    <image>
+                                        <Image url="@../images/supplier/supplier_ledger_tile.png"/>
+                                    </image>
+                                </ImageView>
+                                <Label text="Supplier Ledger Statement (সরবরাহকারী খাতা)" HBox.hgrow="ALWAYS"
+                                       style="-fx-font-size: 11.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                                <Label text="Double-Entry Ledger" minWidth="-Infinity" style="-fx-font-size: 10px; -fx-text-fill: #64748B;"/>
+                            </HBox>
+                            <TableView fx:id="tblLedger" VBox.vgrow="ALWAYS" styleClass="table-view, supplier-table, compact-table">
+                                <columns>
+                                    <TableColumn fx:id="colLedgerDate" text="Date" minWidth="76.0" prefWidth="78.0"/>
+                                    <TableColumn fx:id="colLedgerType" text="Type / Description" minWidth="98.0" prefWidth="112.0"/>
+                                    <TableColumn fx:id="colLedgerCredit" text="Credit (+)" minWidth="70.0" prefWidth="74.0"/>
+                                    <TableColumn fx:id="colLedgerDebit" text="Debit (-)" minWidth="64.0" prefWidth="68.0"/>
+                                    <TableColumn fx:id="colLedgerBalance" text="Balance" minWidth="78.0" prefWidth="82.0"/>
+                                </columns>
+                                <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                </columnResizePolicy>
+                                <placeholder>
+                                    <VBox alignment="CENTER" spacing="8.0" style="-fx-padding: 24px;">
+                                        <ImageView fitWidth="40.0" fitHeight="40.0" preserveRatio="true" smooth="true">
+                                            <image>
+                                                <Image url="@../images/supplier/supplier_ledger_tile.png"/>
+                                            </image>
+                                        </ImageView>
+                                        <Label text="No ledger entries for this supplier yet." style="-fx-font-size: 12.5px; -fx-font-weight: 700; -fx-text-fill: #334155;"/>
+                                        <Label text="Purchases and payment vouchers will appear here chronologically." style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                                    </VBox>
+                                </placeholder>
+                            </TableView>
+                        </VBox>
+                    </Tab>
+                    <Tab text="Supplied Products &amp; TP (পণ্য তালিকা)">
+                        <VBox spacing="6.0" style="-fx-padding: 6 0 0 0;">
+                            <Label text="Products linked to this supplier with independent Trade Price (TP)"
+                                   style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                            <TableView fx:id="tblSuppliedProducts" VBox.vgrow="ALWAYS" styleClass="table-view, supplier-table, compact-table">
+                                <columns>
+                                    <TableColumn fx:id="colSupProdName" text="Product" minWidth="110.0" prefWidth="130.0"/>
+                                    <TableColumn fx:id="colSupProdTp" text="Trade Price" minWidth="72.0" prefWidth="78.0"/>
+                                    <TableColumn fx:id="colSupProdUnit" text="Purchase Unit" minWidth="78.0" prefWidth="84.0"/>
+                                    <TableColumn fx:id="colSupProdLast" text="Last Cost" minWidth="68.0" prefWidth="76.0"/>
+                                    <TableColumn fx:id="colSupProdPref" text="Status" minWidth="58.0" prefWidth="64.0"/>
+                                </columns>
+                                <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                                </columnResizePolicy>
+                                <placeholder>
+                                    <VBox alignment="CENTER" spacing="6.0" style="-fx-padding: 24px;">
+                                        <Label text="No products mapped yet" style="-fx-font-size: 12.5px; -fx-font-weight: 700; -fx-text-fill: #334155;"/>
+                                        <Label text="Link products to this supplier in Inventory -&gt; Edit Product." style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                                    </VBox>
+                                </placeholder>
+                            </TableView>
+                        </VBox>
+                    </Tab>
+                </TabPane>
+            </VBox>
+
+        </VBox>
+    </HBox>
+</VBox>

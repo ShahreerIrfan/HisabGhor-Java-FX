@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<VBox fx:id="rootSalesPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.smartkhata.controller.SalesController"
+      spacing="14.0" styleClass="main-content, pos-page-root">
+    <padding>
+        <Insets top="16.0" right="20.0" bottom="18.0" left="20.0"/>
+    </padding>
+
+    <!-- Top Header Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="12.0">
+        <!-- Left Icon Tile + Title -->
+        <StackPane styleClass="pos-header-badge">
+            <ImageView fitWidth="24.0" fitHeight="24.0" preserveRatio="true" smooth="true">
+                <image>
+                    <Image url="@../images/grocery/sales_cart.png"/>
+                </image>
+            </ImageView>
+        </StackPane>
+
+        <VBox spacing="1.0" minWidth="-Infinity">
+            <Label text="Sales &amp; POS" minWidth="-Infinity"
+                   style="-fx-font-size: 20px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+            <Label text="Create sales, bill customers, and track receivables." minWidth="-Infinity"
+                   style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+        </VBox>
+
+        <Region HBox.hgrow="ALWAYS"/>
+
+        <!-- Mode & Action Buttons -->
+        <Button fx:id="btnToggleHistory" text="Sales History" onAction="#onToggleHistory"
+                styleClass="pos-history-toggle-btn" minWidth="-Infinity">
+            <graphic>
+                <SVGPath content="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                         fill="#475569" scaleX="0.66" scaleY="0.66"/>
+            </graphic>
+        </Button>
+
+        <Button fx:id="btnNewSale" text="New Sale (POS)" onAction="#onNewSale"
+                styleClass="btn-emerald-primary" minWidth="-Infinity" prefHeight="38.0"
+                style="-fx-background-radius: 9px; -fx-padding: 0 15px; -fx-graphic-text-gap: 7px; -fx-font-size: 12.5px;">
+            <graphic>
+                <SVGPath content="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+                         fill="#FFFFFF" scaleX="0.72" scaleY="0.72"/>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <!-- Primary Content Area: Switches cleanly between Live 3-Panel POS and Sales History -->
+    <StackPane VBox.vgrow="ALWAYS">
+
+        <!-- =================================================================
+             MODE 1: LIVE 3-PANEL POS BILLING + PREVIOUS POS ORDERS WORKSTATION
+             ================================================================= -->
+        <VBox fx:id="panePosWorkspace" spacing="12.0">
+            <HBox spacing="14.0" VBox.vgrow="ALWAYS" minHeight="248.0" prefHeight="385.0">
+
+                <!-- LEFT PANEL: Active POS Cart -->
+                <VBox spacing="12.0" HBox.hgrow="ALWAYS" minWidth="444.0" styleClass="sk-card"
+                      style="-fx-padding: 14px;">
+
+                <!-- Barcode Scan & Product Search Row -->
+                <HBox alignment="CENTER_LEFT" spacing="8.0">
+                    <Button fx:id="btnBarcodeFocus" onAction="#onFocusPosSearch" styleClass="pos-scanner-badge">
+                        <tooltip>
+                            <Tooltip text="Focus barcode or product search (F2)"/>
+                        </tooltip>
+                        <graphic>
+                            <SVGPath content="M2 6h2V4h3V2H2v4zm18-4h-5v2h3v2h2V2zM4 18v-2H2v4h5v-2H4zm16-2v2h-3v2h5v-4h-2zM6 7h2v10H6V7zm3 0h1v10H9V7zm2 0h2v10h-2V7zm3 0h1v10h-1V7zm2 0h2v10h-2V7z"
+                                     fill="#15803D" scaleX="0.78" scaleY="0.78"/>
+                        </graphic>
+                    </Button>
+
+                    <HBox alignment="CENTER_LEFT" spacing="8.0" HBox.hgrow="ALWAYS" styleClass="pos-search-wrap">
+                        <TextField fx:id="txtPosSearch" promptText="Search or scan product (e.g., Rice, Oil, Soap...)"
+                                   onKeyReleased="#onPosSearchKeyReleased" onAction="#onPosSearchEnter"
+                                   HBox.hgrow="ALWAYS"
+                                   style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 0; -fx-font-size: 12.5px; -fx-prompt-text-fill: #94A3B8;"/>
+                        <Label text="F2" styleClass="pos-f2-pill"/>
+                    </HBox>
+                </HBox>
+
+                <!-- Active Cart Line Items Table -->
+                <TableView fx:id="tblCart" VBox.vgrow="ALWAYS" styleClass="table-view, pos-cart-table">
+                    <columns>
+                        <TableColumn fx:id="colCartProduct" text="Product" minWidth="148.0" prefWidth="188.0"/>
+                        <TableColumn fx:id="colCartQty" text="Qty" minWidth="86.0" prefWidth="92.0" maxWidth="104.0"/>
+                        <TableColumn fx:id="colCartPrice" text="Price (BDT)" minWidth="78.0" prefWidth="84.0" maxWidth="96.0"/>
+                        <TableColumn fx:id="colCartTotal" text="Total (BDT)" minWidth="80.0" prefWidth="86.0" maxWidth="104.0"/>
+                        <TableColumn fx:id="colCartRemove" text="" minWidth="30.0" prefWidth="32.0" maxWidth="36.0"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                    <placeholder>
+                        <VBox alignment="CENTER" spacing="8.0" style="-fx-padding: 36px 16px;">
+                            <ImageView fitWidth="56.0" fitHeight="56.0" preserveRatio="true" smooth="true">
+                                <image>
+                                    <Image url="@../images/grocery/empty_sales_basket.png"/>
+                                </image>
+                            </ImageView>
+                            <Label text="POS cart is empty" style="-fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: #334155;"/>
+                            <Label text="Scan barcode (F2), search above, or click a product on the right to start billing."
+                                   wrapText="true" textAlignment="CENTER"
+                                   style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                        </VBox>
+                    </placeholder>
+                </TableView>
+
+                <!-- Cart Bottom Action Footer -->
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <Button fx:id="btnClearAll" text="Clear All" onAction="#onClearAllCart" styleClass="pos-clear-btn">
+                        <graphic>
+                            <SVGPath content="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM8 9h8v10H8V9zm7.5-5l-1-1h-5l-1 1H5v2h14V4z"
+                                     fill="#DC2626" scaleX="0.65" scaleY="0.65"/>
+                        </graphic>
+                    </Button>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Button fx:id="btnRecallDrafts" text="Held Drafts (0)" onAction="#onOpenDraftsDialog"
+                            styleClass="pos-held-drafts-btn" visible="false" managed="false"/>
+                </HBox>
+            </VBox>
+
+            <!-- CENTER PANEL: Bill Summary, Selected Customer Info & Checkout Controls -->
+            <VBox minWidth="264.0" prefWidth="284.0" maxWidth="316.0" spacing="8.0" styleClass="sk-card"
+                  style="-fx-padding: 12px 13px;">
+
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS"
+                            styleClass="pos-products-scroll" style="-fx-background-color: transparent; -fx-background: transparent; -fx-border-color: transparent;">
+                    <content>
+                        <VBox spacing="8.0" style="-fx-padding: 0 2px 2px 0;">
+                            <!-- Header -->
+                            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                <StackPane styleClass="pos-summary-icon-badge">
+                                    <SVGPath content="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z"
+                                             fill="#15803D" scaleX="0.62" scaleY="0.62"/>
+                                </StackPane>
+                                <Label text="Bill Summary" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                            </HBox>
+
+                            <Separator style="-fx-opacity: 0.55;"/>
+
+                            <!-- Items / Subtotal / Discount -->
+                            <VBox spacing="6.0">
+                                <HBox alignment="CENTER_LEFT">
+                                    <Label text="Items" style="-fx-font-size: 12.5px; -fx-text-fill: #475569;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label fx:id="lblSummaryItems" text="0" style="-fx-font-size: 13px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                                </HBox>
+
+                                <HBox alignment="CENTER_LEFT">
+                                    <Label text="Subtotal" style="-fx-font-size: 12.5px; -fx-text-fill: #475569;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label fx:id="lblSummarySubtotal" text="BDT 0.00" style="-fx-font-size: 13px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                                </HBox>
+
+                                <HBox alignment="CENTER_LEFT">
+                                    <Label text="Discount" style="-fx-font-size: 12.5px; -fx-text-fill: #475569;"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Button fx:id="btnAddDiscount" text="Add Discount" onAction="#onAddDiscount"
+                                            styleClass="pos-discount-pill"/>
+                                </HBox>
+                            </VBox>
+
+                            <!-- Highlighted Net Payable Banner -->
+                            <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="pos-net-banner" style="-fx-padding: 8px 10px;">
+                                <Label text="Net Payable" style="-fx-font-size: 13px; -fx-font-weight: 800; -fx-text-fill: #15803D;"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="lblSummaryNetPayable" text="BDT 0.00" style="-fx-font-size: 15.5px; -fx-font-weight: 800; -fx-text-fill: #0E7B3A;"/>
+                            </HBox>
+
+                            <!-- Customer Selector + Live Customer Information Card -->
+                            <VBox spacing="6.0">
+                                <HBox alignment="CENTER_LEFT" spacing="6.0">
+                                    <SVGPath content="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                                             fill="#1E293B" scaleX="0.65" scaleY="0.65"/>
+                                    <Label text="Customer Information" style="-fx-font-size: 12px; -fx-font-weight: 700; -fx-text-fill: #1E293B;"/>
+                                </HBox>
+
+                                <HBox alignment="CENTER_LEFT" spacing="6.0">
+                                    <ComboBox fx:id="cmbPosCustomer" promptText="Select customer"
+                                              minWidth="0.0" maxWidth="Infinity" HBox.hgrow="ALWAYS" prefHeight="34.0"
+                                              style="-fx-background-color: #FFFFFF; -fx-border-color: #DCE3E8; -fx-border-radius: 8px; -fx-background-radius: 8px;"/>
+                                    <Button fx:id="btnQuickAddCustomer" onAction="#onQuickAddCustomer" styleClass="pos-quick-plus-btn"
+                                            style="-fx-pref-width: 34px; -fx-pref-height: 34px; -fx-min-width: 34px;">
+                                        <tooltip>
+                                            <Tooltip text="Quick Add Customer"/>
+                                        </tooltip>
+                                        <graphic>
+                                            <SVGPath content="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+                                                     fill="#15803D" scaleX="0.68" scaleY="0.68"/>
+                                        </graphic>
+                                    </Button>
+                                </HBox>
+
+                                <!-- Selected Customer Info Summary Card -->
+                                <VBox fx:id="vboxSelectedCustomerCard" spacing="3.0"
+                                      style="-fx-background-color: #F8FAFC; -fx-border-color: #DCE5E9; -fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 7px 9px;">
+                                    <Label fx:id="lblPosCustNamePhone" text="Walk-in Cash Customer"
+                                           wrapText="true" style="-fx-font-size: 11.5px; -fx-font-weight: 700; -fx-text-fill: #0F172A;"/>
+                                    <Label fx:id="lblPosCustAddress" text="Cash sale (choose a customer for Baki)"
+                                           wrapText="true" style="-fx-font-size: 10.5px; -fx-text-fill: #64748B;"/>
+                                    <Label fx:id="lblPosCustDueLimit" text="" visible="false" managed="false"
+                                           wrapText="true" style="-fx-font-size: 10.5px; -fx-font-weight: 700; -fx-text-fill: #075C32;"/>
+                                </VBox>
+                            </VBox>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+
+                <!-- Always-Visible Pinned Confirm Order / Draft / Receipt Actions -->
+                <VBox spacing="6.0" style="-fx-padding: 2px 0 0 0;">
+                    <Button fx:id="btnCompleteSale" text="Confirm Order (F4)" onAction="#onCompleteSale"
+                            maxWidth="Infinity" prefHeight="39.0" styleClass="btn-emerald-primary"
+                            style="-fx-background-radius: 9px; -fx-font-size: 13px; -fx-font-weight: 800; -fx-graphic-text-gap: 8px;">
+                        <graphic>
+                            <SVGPath content="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"
+                                     fill="#FFFFFF" scaleX="0.72" scaleY="0.72"/>
+                        </graphic>
+                    </Button>
+
+                    <HBox spacing="6.0">
+                        <Button fx:id="btnSaveDraft" text="Save Draft" onAction="#onSaveAsDraft"
+                                maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="pos-draft-btn"
+                                style="-fx-pref-height: 32px; -fx-font-size: 11.5px;">
+                            <graphic>
+                                <SVGPath content="M17 3H7c-1.1 0-1.99.9-1.99 2L5 21l7-3 7 3V5c0-1.1-.9-2-2-2zm0 15l-5-2.18L7 18V5h10v13z"
+                                         fill="#15803D" scaleX="0.62" scaleY="0.62"/>
+                            </graphic>
+                        </Button>
+
+                        <Button fx:id="btnPosPrintPreview" text="Preview" onAction="#onPosPrintPreview"
+                                maxWidth="Infinity" HBox.hgrow="ALWAYS" styleClass="pos-print-btn"
+                                style="-fx-pref-height: 32px; -fx-font-size: 11.5px;">
+                            <graphic>
+                                <SVGPath content="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"
+                                         fill="#334155" scaleX="0.62" scaleY="0.62"/>
+                            </graphic>
+                        </Button>
+                    </HBox>
+                </VBox>
+            </VBox>
+
+            <!-- RIGHT PANEL: Popular Products Quick Grid -->
+            <VBox minWidth="252.0" prefWidth="276.0" maxWidth="312.0" spacing="10.0" styleClass="sk-card"
+                  style="-fx-padding: 15px 13px;">
+
+                <HBox alignment="CENTER_LEFT" spacing="7.0">
+                    <SVGPath content="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+                             fill="#15803D" scaleX="0.82" scaleY="0.82"/>
+                    <Label text="Popular Products" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="btnSeeAllProducts" text="See All" onAction="#onSeeAllProducts" styleClass="pos-see-all-btn"/>
+                </HBox>
+
+                <ScrollPane fx:id="scrollPopularProducts" fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+                            VBox.vgrow="ALWAYS" styleClass="pos-products-scroll">
+                    <content>
+                        <StackPane>
+                            <GridPane fx:id="gridPopularProducts" hgap="8.0" vgap="8.0">
+                                <padding>
+                                    <Insets top="2.0" right="2.0" bottom="4.0" left="2.0"/>
+                                </padding>
+                            </GridPane>
+
+                            <VBox fx:id="vboxNoPopularProducts" alignment="CENTER" spacing="10.0"
+                                  visible="false" managed="false" style="-fx-padding: 36px 12px;">
+                                <ImageView fitWidth="46.0" fitHeight="46.0" preserveRatio="true" smooth="true">
+                                    <image>
+                                        <Image url="@../images/grocery/inventory_cube.png"/>
+                                    </image>
+                                </ImageView>
+                                <Label text="No active products yet"
+                                       style="-fx-font-size: 13.5px; -fx-font-weight: 700; -fx-text-fill: #334155;"/>
+                                <Label text="Add products in Inventory to show quick POS tiles here."
+                                       wrapText="true" textAlignment="CENTER"
+                                       style="-fx-font-size: 11.5px; -fx-text-fill: #94A3B8;"/>
+                                <Button text="Open Inventory" onAction="#onOpenInventory" styleClass="pos-discount-pill"/>
+                            </VBox>
+                        </StackPane>
+                    </content>
+                </ScrollPane>
+            </VBox>
+            </HBox>
+
+            <!-- BOTTOM PANEL: Directly Visible Previous POS Orders List (Last 8 Orders, Min 8 Rows Visible) -->
+            <VBox fx:id="panePosOrdersStrip" spacing="8.0" styleClass="pos-orders-strip-card"
+                  minHeight="388.0" prefHeight="396.0">
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <StackPane style="-fx-background-color: #E8F8EA; -fx-background-radius: 7px; -fx-pref-width: 26px; -fx-pref-height: 26px;">
+                        <SVGPath content="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+                                 fill="#008A32" scaleX="0.60" scaleY="0.60"/>
+                    </StackPane>
+                    <Label text="Previous POS Orders — Last 8 Orders (সর্বশেষ ৮টি POS অর্ডার)"
+                           style="-fx-font-size: 13.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                    <Label fx:id="lblPosOrdersCount" text="0 Orders" styleClass="pos-orders-count-pill"/>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <TextField fx:id="txtPosOrdersSearch" promptText="Search invoice no or customer..."
+                               onKeyReleased="#onPosOrdersSearchReleased" prefWidth="220.0"
+                               style="-fx-pref-height: 30px; -fx-background-color: #F8FAFC; -fx-border-color: #DCE5E9; -fx-border-radius: 8px; -fx-background-radius: 8px; -fx-padding: 0 10; -fx-font-size: 12px;"/>
+
+                    <Button text="Refresh" onAction="#onRefresh" styleClass="btn-subtle-refresh"
+                            style="-fx-pref-height: 30px; -fx-padding: 0 10; -fx-font-size: 11.5px;">
+                        <graphic>
+                            <SVGPath content="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+                                     fill="#334155" scaleX="0.58" scaleY="0.58"/>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="btnOpenFullHistory" text="Full Orders &amp; Details View" onAction="#onToggleHistory"
+                            styleClass="pos-discount-pill"
+                            style="-fx-pref-height: 30px; -fx-padding: 0 12; -fx-font-size: 11.5px;"/>
+                </HBox>
+
+                <TableView fx:id="tblPosOrders" fixedCellSize="36.0" minHeight="324.0" prefHeight="328.0" VBox.vgrow="ALWAYS"
+                           styleClass="table-view, customer-table, compact-table">
+                    <columns>
+                        <TableColumn fx:id="colPosOrdInvoice" text="Invoice No" minWidth="128.0" prefWidth="148.0"/>
+                        <TableColumn fx:id="colPosOrdDate" text="Date &amp; Time" minWidth="110.0" prefWidth="126.0"/>
+                        <TableColumn fx:id="colPosOrdCustomer" text="Customer" minWidth="105.0" prefWidth="145.0"/>
+                        <TableColumn fx:id="colPosOrdItems" text="Items" minWidth="48.0" prefWidth="58.0"/>
+                        <TableColumn fx:id="colPosOrdNet" text="Net Amt" minWidth="78.0" prefWidth="92.0"/>
+                        <TableColumn fx:id="colPosOrdPaid" text="Paid" minWidth="74.0" prefWidth="88.0"/>
+                        <TableColumn fx:id="colPosOrdDue" text="Due" minWidth="70.0" prefWidth="82.0"/>
+                        <TableColumn fx:id="colPosOrdStatus" text="Status" minWidth="68.0" prefWidth="78.0"/>
+                        <TableColumn fx:id="colPosOrdActions" text="Actions" minWidth="205.0" prefWidth="215.0" sortable="false"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                    <placeholder>
+                        <Label text="No previous POS orders recorded yet. Complete a sale above to see it here."
+                               style="-fx-font-size: 12px; -fx-text-fill: #64748B; -fx-padding: 20px;"/>
+                    </placeholder>
+                </TableView>
+            </VBox>
+        </VBox>
+
+        <!-- =================================================================
+             MODE 2: SALES HISTORY & INVOICE INSPECTOR
+             ================================================================= -->
+        <VBox fx:id="paneHistoryWorkspace" spacing="10.0" visible="false" managed="false">
+
+            <!-- KPI Metric Strip + Search Toolbar -->
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <TextField fx:id="txtSearch" promptText="Search invoices by invoice number or customer name..."
+                           onKeyReleased="#onSearchKeyReleased" HBox.hgrow="ALWAYS" styleClass="search-field"
+                           style="-fx-pref-height: 38px; -fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-radius: 9; -fx-background-radius: 9; -fx-padding: 0 12;"/>
+
+                <ComboBox fx:id="cmbHistoryDateRange" onAction="#onHistoryDatePresetChanged" prefWidth="138.0"
+                          style="-fx-pref-height: 38px; -fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-radius: 9; -fx-background-radius: 9;"/>
+
+                <ComboBox fx:id="cmbStatusFilter" promptText="All Statuses" onAction="#onStatusFilterChanged"
+                          style="-fx-pref-height: 38px; -fx-background-color: white; -fx-border-color: #E2E8F0; -fx-border-radius: 9; -fx-background-radius: 9; -fx-pref-width: 132px;"/>
+
+                <Button fx:id="btnHistoryClearFilters" text="Clear" onAction="#onClearHistoryFilters"
+                        visible="false" managed="false"
+                        style="-fx-background-color: #FEF3C7; -fx-text-fill: #92400E; -fx-border-color: #FCD34D; -fx-border-radius: 8; -fx-background-radius: 8; -fx-pref-height: 38px; -fx-padding: 0 12; -fx-cursor: hand; -fx-font-weight: 700;"/>
+
+                <!-- Compact KPI Chips -->
+                <HBox alignment="CENTER_LEFT" spacing="6.0" styleClass="metric-chip-neutral" style="-fx-padding: 7px 12px;">
+                    <Label text="Invoices:" style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblTotalInvoices" text="0" style="-fx-font-size: 13px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="6.0" styleClass="metric-chip-danger" style="-fx-padding: 7px 12px;">
+                    <Label text="Due:" style="-fx-font-size: 11.5px; -fx-font-weight: 600; -fx-text-fill: #991B1B;"/>
+                    <Label fx:id="lblTotalDues" text="BDT 0" style="-fx-font-size: 13px; -fx-font-weight: 800; -fx-text-fill: #DC2626;"/>
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" spacing="6.0"
+                      style="-fx-background-color: #F0FDF4; -fx-padding: 7px 12px; -fx-background-radius: 12px; -fx-border-color: #86EFAC; -fx-border-radius: 12px; -fx-border-width: 1px;">
+                    <Label text="Net Sales:" style="-fx-font-size: 11.5px; -fx-font-weight: 600; -fx-text-fill: #166534;"/>
+                    <Label fx:id="lblTotalSales" text="BDT 0" style="-fx-font-size: 13px; -fx-font-weight: 800; -fx-text-fill: #15803D;"/>
+                </HBox>
+
+                <Button fx:id="btnRefresh" text="Refresh" onAction="#onRefresh" styleClass="btn-subtle-refresh">
+                    <graphic>
+                        <SVGPath content="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+                                 fill="#334155" scaleX="0.65" scaleY="0.65"/>
+                    </graphic>
+                </Button>
+            </HBox>
+
+            <HBox fx:id="boxHistoryCustomDates" alignment="CENTER_LEFT" spacing="8.0" visible="false" managed="false">
+                <Label text="From:" style="-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                <DatePicker fx:id="dpHistoryStart" onAction="#onHistoryCustomDateChanged" prefWidth="138.0" promptText="Start date"/>
+                <Label text="To:" style="-fx-font-size: 12px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                <DatePicker fx:id="dpHistoryEnd" onAction="#onHistoryCustomDateChanged" prefWidth="138.0" promptText="End date"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="lblHistoryFilterHint" text="Showing all dates" style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+            </HBox>
+
+            <!-- Split Sales Table & Invoice Detail Inspector -->
+            <HBox spacing="14.0" VBox.vgrow="ALWAYS">
+                <VBox spacing="10.0" HBox.hgrow="ALWAYS" styleClass="sk-card">
+                    <TableView fx:id="tblSales" VBox.vgrow="ALWAYS" styleClass="table-view, customer-table, compact-table">
+                        <columns>
+                            <TableColumn fx:id="colInvoiceNo" text="Invoice No" minWidth="112.0" prefWidth="126.0"/>
+                            <TableColumn fx:id="colDate" text="Date" minWidth="88.0" prefWidth="98.0"/>
+                            <TableColumn fx:id="colCustomer" text="Customer" minWidth="74.0" prefWidth="96.0"/>
+                            <TableColumn fx:id="colAmount" text="Net Amt" minWidth="60.0" prefWidth="68.0"/>
+                            <TableColumn fx:id="colPaid" text="Paid" minWidth="54.0" prefWidth="62.0"/>
+                            <TableColumn fx:id="colDue" text="Due" minWidth="54.0" prefWidth="62.0"/>
+                            <TableColumn fx:id="colStatus" text="Status" minWidth="64.0" prefWidth="72.0"/>
+                            <TableColumn fx:id="colSalesActions" text="Actions" minWidth="195.0" prefWidth="205.0" sortable="false"/>
+                        </columns>
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
+                        <placeholder>
+                            <VBox alignment="CENTER" spacing="8.0" style="-fx-padding: 40px;">
+                                <ImageView fitWidth="54.0" fitHeight="54.0" preserveRatio="true" smooth="true">
+                                    <image>
+                                        <Image url="@../images/grocery/empty_transactions_clipboard.png"/>
+                                    </image>
+                                </ImageView>
+                                <Label text="No sales invoices found" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #64748B;"/>
+                                <Label text="Click '+ New Sale (POS)' to record a sale." style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                            </VBox>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+
+                <VBox fx:id="pnlDetailContainer" minWidth="362.0" prefWidth="395.0" maxWidth="490.0" spacing="12.0" styleClass="sk-card">
+                    <VBox fx:id="vboxNoSelection" alignment="CENTER" spacing="10.0" VBox.vgrow="ALWAYS" style="-fx-padding: 50px 20px;">
+                        <Label text="Select an Invoice" style="-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #64748B;"/>
+                        <Label text="Select an invoice from the list to view line items, payment breakdown, void or print receipt."
+                               textAlignment="CENTER" wrapText="true" style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+
+                    <VBox fx:id="vboxInvoiceDetails" spacing="12.0" VBox.vgrow="ALWAYS" visible="false" managed="false">
+                        <VBox spacing="8.0">
+                            <HBox alignment="CENTER_LEFT" spacing="8.0">
+                                <VBox spacing="2.0" HBox.hgrow="ALWAYS" minWidth="0.0">
+                                    <Label fx:id="lblDetailInvoiceNo" text="INV-20261109-0001"
+                                           style="-fx-font-size: 15.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                                    <Label fx:id="lblDetailCustomerInfo" text="Customer: Walk-in Cash | Date: —"
+                                           style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                                    <Label fx:id="lblDetailNotes" text="" wrapText="true" visible="false" managed="false"
+                                           style="-fx-font-size: 11px; -fx-text-fill: #475569; -fx-font-style: italic;"/>
+                                </VBox>
+                            </HBox>
+                            <FlowPane hgap="6.0" vgap="6.0">
+                                <Button fx:id="btnViewOrderDetails" text="Order Details" onAction="#onOpenSelectedOrderDetails"
+                                        styleClass="pos-row-action-details"
+                                        style="-fx-padding: 5px 10px; -fx-font-size: 11.5px;"/>
+
+                                <Button fx:id="btnEditSaleOrder" text="Edit Order" onAction="#onEditSelectedOrder"
+                                        styleClass="pos-row-action-edit"
+                                        style="-fx-padding: 5px 10px; -fx-font-size: 11.5px;"/>
+
+                                <Button fx:id="btnDeleteSaleOrder" text="Delete Order" onAction="#onDeleteSelectedOrder"
+                                        styleClass="pos-row-action-delete"
+                                        style="-fx-padding: 5px 10px; -fx-font-size: 11.5px;"/>
+
+                                <Button fx:id="btnEditSaleNote" text="Edit Note" onAction="#onEditSaleNote"
+                                        style="-fx-background-color: #F8FAFC; -fx-text-fill: #334155; -fx-font-weight: 700; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 5px 10px; -fx-font-size: 11.5px; -fx-cursor: hand;"/>
+
+                                <Button fx:id="btnPrintReceipt" text="Print Receipt" onAction="#onPrintReceipt" styleClass="pos-print-btn"
+                                        minWidth="-Infinity" style="-fx-pref-height: 29px; -fx-padding: 0 10px; -fx-font-size: 11.5px;"/>
+
+                                <Button fx:id="btnReturnItems" text="Return Items" onAction="#onReturnSaleItems"
+                                        minWidth="-Infinity" style="-fx-background-color: #FEF3C7; -fx-text-fill: #92400E; -fx-font-weight: 700; -fx-border-color: #FDE68A; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 5px 10px; -fx-font-size: 11.5px; -fx-cursor: hand;"/>
+
+                                <Button fx:id="btnVoidSale" text="Void Sale" onAction="#onVoidSale" styleClass="btn-archive-soft"
+                                        minWidth="-Infinity" style="-fx-padding: 5px 10px; -fx-font-size: 11.5px;"/>
+
+                                <Button fx:id="btnDeleteVoidedSale" text="Delete Voided" onAction="#onDeleteVoidedSale"
+                                        visible="false" managed="false"
+                                        style="-fx-background-color: #FEE2E2; -fx-text-fill: #B91C1C; -fx-font-weight: 700; -fx-border-color: #FCA5A5; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 5px 10px; -fx-font-size: 11.5px; -fx-cursor: hand;"/>
+                            </FlowPane>
+                        </VBox>
+
+                        <HBox spacing="10.0" alignment="CENTER"
+                              style="-fx-background-color: #F8FAFC; -fx-padding: 10 12; -fx-background-radius: 9; -fx-border-color: #E2E8F0; -fx-border-radius: 9;">
+                            <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                                <Label text="NET AMOUNT" style="-fx-font-size: 10px; -fx-font-weight: 700; -fx-text-fill: #64748B;"/>
+                                <Label fx:id="lblDetailNet" text="BDT 0.00" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #1E293B;"/>
+                            </VBox>
+                            <Separator orientation="VERTICAL"/>
+                            <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                                <Label text="PAID AMOUNT" style="-fx-font-size: 10px; -fx-font-weight: 700; -fx-text-fill: #64748B;"/>
+                                <Label fx:id="lblDetailPaid" text="BDT 0.00" style="-fx-font-size: 14.5px; -fx-font-weight: 700; -fx-text-fill: #15803D;"/>
+                            </VBox>
+                            <Separator orientation="VERTICAL"/>
+                            <VBox spacing="2.0" HBox.hgrow="ALWAYS">
+                                <Label text="DUE (বাকি)" style="-fx-font-size: 10px; -fx-font-weight: 700; -fx-text-fill: #64748B;"/>
+                                <Label fx:id="lblDetailDue" text="BDT 0.00" style="-fx-font-size: 14.5px; -fx-font-weight: 800; -fx-text-fill: #DC2626;"/>
+                            </VBox>
+                        </HBox>
+
+                        <Label text="Invoice Line Items" style="-fx-font-size: 13px; -fx-font-weight: 700; -fx-text-fill: #1E293B;"/>
+                        <TableView fx:id="tblDetailItems" VBox.vgrow="ALWAYS" styleClass="table-view, compact-table">
+                            <columns>
+                                <TableColumn fx:id="colItemProduct" text="Product" minWidth="110.0" prefWidth="148.0"/>
+                                <TableColumn fx:id="colItemQty" text="Qty" minWidth="38.0" prefWidth="44.0" maxWidth="56.0"/>
+                                <TableColumn fx:id="colItemPrice" text="Price" minWidth="64.0" prefWidth="74.0"/>
+                                <TableColumn fx:id="colItemTotal" text="Total" minWidth="66.0" prefWidth="76.0"/>
+                            </columns>
+                            <columnResizePolicy>
+                                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                            </columnResizePolicy>
+                        </TableView>
+
+                        <Label fx:id="lblVoidStatus" text="VOIDED: Reason" visible="false" managed="false"
+                               style="-fx-background-color: #FEF2F2; -fx-text-fill: #991B1B; -fx-font-weight: bold; -fx-padding: 8 12; -fx-background-radius: 6; -fx-border-color: #F87171; -fx-border-radius: 6;"/>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </VBox>
+
+    </StackPane>
+</VBox>

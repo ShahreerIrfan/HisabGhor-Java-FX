@@ -1,0 +1,31 @@
+# Build & Packaging Outputs
+target/
+dist/
+*.exe
+*.msi
+*.zip
+*.tar.gz
+dependency-reduced-pom.xml
+
+# Runtime Databases & Logs
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.skbak
+logs/
+*.log
+hs_err_pid*
+
+# OS & IDE Temporary Files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+*.swp
+*~

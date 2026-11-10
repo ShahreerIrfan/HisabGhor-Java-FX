@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.SVGPath?>
+
+<ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.smartkhata.controller.SettingsController"
+            fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED"
+            style="-fx-background-color: -color-surface-bg; -fx-background: -color-surface-bg;">
+
+    <VBox spacing="16.0" style="-fx-background-color: -color-surface-bg;" styleClass="main-content">
+        <padding>
+            <Insets top="20.0" right="24.0" bottom="24.0" left="24.0"/>
+        </padding>
+
+        <!-- Header -->
+        <VBox spacing="2.0">
+            <Label fx:id="lblHeaderTitle" text="Settings &amp; Preferences (সেটিংস ও পছন্দসমূহ)"
+                   style="-fx-font-size: 20px; -fx-font-weight: 800; -fx-text-fill: #1E293B;"/>
+            <Label fx:id="lblHeaderSubtitle" text="Manage business profile, visual themes, Bengali localization, local alerts, and system configuration."
+                   style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+        </VBox>
+
+        <!-- Status Message Banner -->
+        <HBox fx:id="statusBanner" visible="false" managed="false" alignment="CENTER_LEFT" spacing="10.0"
+              style="-fx-padding: 10 16; -fx-background-radius: 8; -fx-border-radius: 8;">
+            <Label fx:id="lblStatusMessage" text="" style="-fx-font-weight: 600; -fx-font-size: 13px;"/>
+        </HBox>
+
+        <!-- Tab Pane -->
+        <TabPane fx:id="settingsTabPane" tabClosingPolicy="UNAVAILABLE"
+                 style="-fx-background-color: transparent;">
+
+            <!-- ========================================== -->
+            <!-- TAB 1: Business Profile                    -->
+            <!-- ========================================== -->
+            <Tab fx:id="tabBusinessProfile" text="  Business Profile (দোকানের তথ্য)  ">
+                <VBox spacing="16.0" style="-fx-background-color: white; -fx-padding: 24; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                    <Label text="Store Identity &amp; Legal Details"
+                           style="-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #1E293B;"/>
+
+                    <GridPane hgap="16.0" vgap="14.0">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <!-- Business Name -->
+                        <VBox spacing="6.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label fx:id="lblBizName" text="Business Name *" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="txtBizName" promptText="e.g. Bismillah General Store" style="-fx-pref-height: 38px;"/>
+                        </VBox>
+
+                        <!-- Legal Registered Name -->
+                        <VBox spacing="6.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label fx:id="lblBizLegalName" text="Legal / Registered Name" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="txtBizLegalName" promptText="e.g. Bismillah Traders Ltd." style="-fx-pref-height: 38px;"/>
+                        </VBox>
+
+                        <!-- Contact Phone -->
+                        <VBox spacing="6.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label fx:id="lblBizPhone" text="Contact Phone" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="txtBizPhone" promptText="e.g. 01711223344" style="-fx-pref-height: 38px;"/>
+                        </VBox>
+
+                        <!-- Trade License -->
+                        <VBox spacing="6.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label fx:id="lblBizLicense" text="Trade License No" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="txtBizLicense" promptText="e.g. TRAD/DNCC/123456/2026" style="-fx-pref-height: 38px;"/>
+                        </VBox>
+
+                        <!-- Store Address -->
+                        <VBox spacing="6.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                            <Label fx:id="lblBizAddress" text="Store Address" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="txtBizAddress" promptText="e.g. Shop #12, Karwan Bazar, Dhaka" style="-fx-pref-height: 38px;"/>
+                        </VBox>
+                    </GridPane>
+
+                    <Separator style="-fx-padding: 8 0;"/>
+
+                    <Label text="Invoice &amp; Receipt Branding"
+                           style="-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #1E293B;"/>
+
+                    <GridPane hgap="16.0" vgap="14.0">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <!-- Invoice Header -->
+                        <VBox spacing="6.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label fx:id="lblInvoiceHeader" text="Invoice Header Note (Optional)" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="txtInvoiceHeader" promptText="e.g. Wholesale &amp; Retail Groceries" style="-fx-pref-height: 38px;"/>
+                        </VBox>
+
+                        <!-- Invoice Footer -->
+                        <VBox spacing="6.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label fx:id="lblInvoiceFooter" text="Invoice Footer Note (Optional)" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="txtInvoiceFooter" promptText="e.g. Thank you for your business! Please visit again." style="-fx-pref-height: 38px;"/>
+                        </VBox>
+
+                        <!-- Logo Path -->
+                        <VBox spacing="6.0" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                            <Label fx:id="lblLogoPath" text="Store Logo Image Path" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <HBox spacing="10.0">
+                                <TextField fx:id="txtLogoPath" promptText="C:\path\to\logo.png" HBox.hgrow="ALWAYS" style="-fx-pref-height: 38px;"/>
+                                <Button fx:id="btnBrowseLogo" text="Browse..." onAction="#onBrowseLogo"
+                                        style="-fx-pref-height: 38px; -fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                            </HBox>
+                        </VBox>
+                    </GridPane>
+
+                    <!-- Save Profile Action -->
+                    <HBox alignment="CENTER_RIGHT" spacing="12.0" style="-fx-padding: 12 0 0 0;">
+                        <Button fx:id="btnSaveBusinessProfile" text="Save Business Profile" onAction="#onSaveBusinessProfile"
+                                style="-fx-background-color: #1E60D5; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 22; -fx-background-radius: 8; -fx-cursor: hand;"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+
+            <!-- ========================================== -->
+            <!-- TAB 2: User Preferences & Appearance       -->
+            <!-- ========================================== -->
+            <Tab fx:id="tabPreferences" text="  User Preferences (পছন্দ ও রূপরেখা)  ">
+                <VBox spacing="16.0" style="-fx-background-color: white; -fx-padding: 24; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                    <Label text="Display, Language &amp; Table Density"
+                           style="-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #1E293B;"/>
+
+                    <GridPane hgap="16.0" vgap="14.0">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="50"/>
+                            <ColumnConstraints percentWidth="50"/>
+                        </columnConstraints>
+
+                        <!-- Theme Selection -->
+                        <VBox spacing="6.0" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                            <Label fx:id="lblTheme" text="Application Theme" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <ComboBox fx:id="cmbTheme" maxWidth="Infinity" style="-fx-pref-height: 38px;"/>
+                        </VBox>
+
+                        <!-- Language Selection -->
+                        <VBox spacing="6.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <Label fx:id="lblLanguage" text="Interface Language" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <ComboBox fx:id="cmbLanguage" maxWidth="Infinity" style="-fx-pref-height: 38px;"/>
+                        </VBox>
+
+                        <!-- Date Format -->
+                        <VBox spacing="6.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                            <Label fx:id="lblDateFormat" text="Date Display Format" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <ComboBox fx:id="cmbDateFormat" maxWidth="Infinity" style="-fx-pref-height: 38px;"/>
+                        </VBox>
+
+                        <!-- Number Format -->
+                        <VBox spacing="6.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label fx:id="lblNumberFormat" text="Number Format" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <ComboBox fx:id="cmbNumberFormat" maxWidth="Infinity" style="-fx-pref-height: 38px;"/>
+                        </VBox>
+
+                        <!-- Table Row Density -->
+                        <VBox spacing="6.0" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                            <Label fx:id="lblTableRowSize" text="Table Density (Row Height)" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <ComboBox fx:id="cmbTableRowSize" maxWidth="Infinity" style="-fx-pref-height: 38px;"/>
+                        </VBox>
+
+                        <!-- Currency Display Format -->
+                        <VBox spacing="6.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                            <Label fx:id="lblBdtFormat" text="Currency Symbol Preference" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <ComboBox fx:id="cmbBdtFormat" maxWidth="Infinity" style="-fx-pref-height: 38px;"/>
+                        </VBox>
+
+                        <!-- Default Low Stock Threshold -->
+                        <VBox spacing="6.0" GridPane.columnIndex="0" GridPane.rowIndex="3">
+                            <Label fx:id="lblDefaultLowStock" text="Default Low-Stock Alert Threshold" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <TextField fx:id="txtDefaultLowStock" promptText="10" style="-fx-pref-height: 38px;"/>
+                        </VBox>
+
+                        <!-- Default Report Period -->
+                        <VBox spacing="6.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                            <Label fx:id="lblDefaultReportPeriod" text="Default Reporting Period" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                            <ComboBox fx:id="cmbDefaultReportPeriod" maxWidth="Infinity" style="-fx-pref-height: 38px;"/>
+                        </VBox>
+                    </GridPane>
+
+                    <Separator style="-fx-padding: 8 0;"/>
+
+                    <!-- In-App Notifications Toggle -->
+                    <VBox spacing="6.0">
+                        <CheckBox fx:id="chkInAppAlerts" text="Enable In-App Proactive Reminders (Low stock &amp; customer due alerts)"
+                                  selected="true" style="-fx-font-weight: 600; -fx-text-fill: #1E293B; -fx-cursor: hand;"/>
+                        <Label text="Alerts appear automatically inside the desktop app. No SMS, internet, or third-party cloud required."
+                               style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                    </VBox>
+
+                    <Separator style="-fx-padding: 8 0;"/>
+
+                    <!-- Supply Chain & Pricing Policies -->
+                    <VBox spacing="10.0">
+                        <Label text="Supply Chain, GRN &amp; POS Pricing Policies"
+                               style="-fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: #0E7B3A;"/>
+                        <GridPane hgap="16.0" vgap="10.0">
+                            <columnConstraints>
+                                <ColumnConstraints percentWidth="50"/>
+                                <ColumnConstraints percentWidth="50"/>
+                            </columnConstraints>
+                            <CheckBox fx:id="chkAllowDirectGrn" text="Allow Direct GRN without Purchase Order" selected="true"
+                                      GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: 600; -fx-text-fill: #1E293B;"/>
+                            <CheckBox fx:id="chkAllowOverReceipt" text="Allow Over-Receipt beyond PO Ordered Qty" selected="false"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-weight: 600; -fx-text-fill: #1E293B;"/>
+                            <VBox spacing="4.0" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                                <Label text="Selling Above MRP Rule" style="-fx-font-weight: 600; -fx-text-fill: #334155;"/>
+                                <ComboBox fx:id="cmbMrpPolicy" maxWidth="Infinity" style="-fx-pref-height: 36px;"/>
+                            </VBox>
+                            <CheckBox fx:id="chkAllowNegativeStock" text="Allow Negative Stock POS Sales" selected="false"
+                                      GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-font-weight: 600; -fx-text-fill: #1E293B;"/>
+                        </GridPane>
+                    </VBox>
+
+                    <!-- Save Preferences Action -->
+                    <HBox alignment="CENTER_RIGHT" spacing="12.0" style="-fx-padding: 12 0 0 0;">
+                        <Button fx:id="btnSavePreferences" text="Save Preferences" onAction="#onSavePreferences"
+                                style="-fx-background-color: #1E60D5; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 22; -fx-background-radius: 8; -fx-cursor: hand;"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+
+            <!-- ========================================== -->
+            <!-- TAB 3: In-App Notifications & Alerts       -->
+            <!-- ========================================== -->
+            <Tab fx:id="tabNotifications" text="  In-App Alerts (বিজ্ঞপ্তি ও অ্যালার্ট)  ">
+                <VBox spacing="16.0" style="-fx-background-color: white; -fx-padding: 24; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                    <HBox alignment="CENTER_LEFT" spacing="12.0">
+                        <VBox spacing="2.0">
+                            <Label text="Active Local Proactive Notifications"
+                                   style="-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #1E293B;"/>
+                            <Label text="Shows products requiring restocking and customers with overdue balances."
+                                   style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btnRefreshAlerts" text=" Refresh Alerts" onAction="#onRefreshAlerts"
+                                style="-fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: 600; -fx-padding: 8 16; -fx-cursor: hand;">
+                            <graphic>
+                                <SVGPath content="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+                                         fill="#475569" scaleX="0.75" scaleY="0.75" />
+                            </graphic>
+                        </Button>
+                    </HBox>
+
+                    <!-- Notification Table -->
+                    <TableView fx:id="tblNotifications" prefHeight="350.0" style="-fx-background-radius: 8;">
+                        <columns>
+                            <TableColumn fx:id="colAlertType" text="Type" prefWidth="120.0"/>
+                            <TableColumn fx:id="colAlertSeverity" text="Severity" prefWidth="100.0"/>
+                            <TableColumn fx:id="colAlertTitle" text="Title" prefWidth="220.0"/>
+                            <TableColumn fx:id="colAlertMessage" text="Message / Description" prefWidth="380.0"/>
+                            <TableColumn fx:id="colAlertTime" text="Detected" prefWidth="150.0"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="No active alerts. All inventory items are well-stocked and customer receivables are clear."
+                                   style="-fx-text-fill: #64748B; -fx-font-size: 13px;"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <!-- ========================================== -->
+            <!-- TAB 4: About & System Info                 -->
+            <!-- ========================================== -->
+            <Tab fx:id="tabAbout" text="  About &amp; Backup (পরিচিতি ও ব্যাকআপ)  ">
+                <VBox spacing="16.0" style="-fx-background-color: white; -fx-padding: 24; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                    <VBox spacing="4.0">
+                        <Label text="SmartKhata Desktop Bookkeeping"
+                               style="-fx-font-size: 18px; -fx-font-weight: 800; -fx-text-fill: #1E60D5;"/>
+                        <Label fx:id="lblAppVersion" text="Version: 1.0.0 (Local-First Offline Architecture)"
+                               style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                    </VBox>
+
+                    <Separator style="-fx-padding: 4 0;"/>
+
+                    <Label text="Storage Locations &amp; Database Files"
+                           style="-fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: #1E293B;"/>
+
+                    <GridPane hgap="16.0" vgap="12.0">
+                        <columnConstraints>
+                            <ColumnConstraints percentWidth="25"/>
+                            <ColumnConstraints percentWidth="75"/>
+                        </columnConstraints>
+
+                        <!-- App Home Directory -->
+                        <Label text="Application Home:" style="-fx-font-weight: 600; -fx-text-fill: #475569;" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                        <TextField fx:id="txtAppHome" editable="false" style="-fx-background-color: #F8FAFC; -fx-pref-height: 34px;" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                        <!-- Data Directory -->
+                        <Label text="Data Storage Path:" style="-fx-font-weight: 600; -fx-text-fill: #475569;" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                        <TextField fx:id="txtDataDir" editable="false" style="-fx-background-color: #F8FAFC; -fx-pref-height: 34px;" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                        <!-- SQLite Database File -->
+                        <Label text="SQLite Database:" style="-fx-font-weight: 600; -fx-text-fill: #475569;" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                        <TextField fx:id="txtDatabaseFile" editable="false" style="-fx-background-color: #F8FAFC; -fx-pref-height: 34px;" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                        <!-- Backup Directory -->
+                        <Label text="Backup Directory:" style="-fx-font-weight: 600; -fx-text-fill: #475569;" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                        <TextField fx:id="txtBackupDir" editable="false" style="-fx-background-color: #F8FAFC; -fx-pref-height: 34px;" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+                    </GridPane>
+
+                    <!-- Legal & Privacy Notice Card -->
+                    <VBox spacing="8.0" style="-fx-background-color: #F0FDF4; -fx-padding: 16; -fx-background-radius: 8; -fx-border-color: #BBF7D0; -fx-border-radius: 8;">
+                        <HBox alignment="CENTER_LEFT" spacing="8.0">
+                            <SVGPath content="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"
+                                     fill="#166534" scaleX="0.8" scaleY="0.8" />
+                            <Label text="Local-First Offline Privacy &amp; Data Ownership"
+                                   style="-fx-font-weight: 700; -fx-text-fill: #166534; -fx-font-size: 13px;"/>
+                        </HBox>
+                        <Label text="SmartKhata stores 100% of your business data, transactions, customer records, and inventory locally on your computer in an ACID-compliant SQLite database. No external tracking, remote telemetry, or mandatory cloud syncing is performed. You maintain complete ownership of your data."
+                               wrapText="true" style="-fx-text-fill: #15803D; -fx-font-size: 12px; -fx-line-spacing: 2;"/>
+                    </VBox>
+
+                    <!-- Backup / Restore Action Buttons -->
+                    <HBox spacing="12.0" style="-fx-padding: 10 0 0 0;">
+                        <Button fx:id="btnCreateBackup" text=" Backup Database (ব্যাকআপ)" onAction="#onBackupDatabase"
+                                style="-fx-background-color: #0284C7; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 8; -fx-cursor: hand;">
+                            <graphic>
+                                <SVGPath content="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"
+                                         fill="white" scaleX="0.75" scaleY="0.75" />
+                            </graphic>
+                        </Button>
+                        <Button fx:id="btnRestoreBackup" text=" Restore Database (রিস্টোর)" onAction="#onRestoreDatabase"
+                                style="-fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-font-weight: bold; -fx-padding: 9 20; -fx-cursor: hand;">
+                            <graphic>
+                                <SVGPath content="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"
+                                         fill="#334155" scaleX="0.75" scaleY="0.75" />
+                            </graphic>
+                        </Button>
+                        <Button fx:id="btnLoadSampleData" text=" Load Sample Grocery Data (নমুনা ডাটা লোড করুন)" onAction="#onLoadSampleData"
+                                style="-fx-background-color: #10B981; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 9 20; -fx-background-radius: 8; -fx-cursor: hand;">
+                            <graphic>
+                                <SVGPath content="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+                                         fill="white" scaleX="0.75" scaleY="0.75" />
+                            </graphic>
+                        </Button>
+                    </HBox>
+                </VBox>
+            </Tab>
+
+            <!-- ========================================== -->
+            <!-- TAB 5: Users & Staff Management            -->
+            <!-- ========================================== -->
+            <Tab fx:id="tabUsers" text="  Users &amp; Staff (ইউজার ও স্টাফ)  ">
+                <VBox spacing="16.0" style="-fx-background-color: white; -fx-padding: 24; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                    <HBox alignment="CENTER_LEFT" spacing="12.0">
+                        <VBox spacing="2.0">
+                            <Label text="Store User Accounts &amp; Access Controls"
+                                   style="-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #1E293B;"/>
+                            <Label text="Manage cashier staff accounts, reset PINs, and configure active roles."
+                                   style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                        </VBox>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button fx:id="btnAddUser" text=" + Add Staff User" onAction="#onAddUser"
+                                style="-fx-background-color: #1E60D5; -fx-text-fill: white; -fx-font-weight: 600; -fx-padding: 8 16; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                        <Button fx:id="btnEditUser" text="Edit Selected" onAction="#onEditUser"
+                                style="-fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: 600; -fx-padding: 8 14; -fx-cursor: hand;"/>
+                        <Button fx:id="btnDeleteUser" text="Delete User" onAction="#onDeleteUser"
+                                style="-fx-background-color: white; -fx-border-color: #FCA5A5; -fx-text-fill: #DC2626; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: 600; -fx-padding: 8 14; -fx-cursor: hand;"/>
+                        <Button fx:id="btnRefreshUsers" text="Refresh" onAction="#onRefreshUsers"
+                                style="-fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: 600; -fx-padding: 8 14; -fx-cursor: hand;"/>
+                    </HBox>
+
+                    <!-- Users Table -->
+                    <TableView fx:id="tblUsers" prefHeight="350.0" style="-fx-background-radius: 8;">
+                        <columns>
+                            <TableColumn fx:id="colUserUsername" text="Username" prefWidth="150.0"/>
+                            <TableColumn fx:id="colUserFullName" text="Full Name" prefWidth="240.0"/>
+                            <TableColumn fx:id="colUserRole" text="Role" prefWidth="120.0"/>
+                            <TableColumn fx:id="colUserStatus" text="Status" prefWidth="110.0"/>
+                            <TableColumn fx:id="colUserLastLogin" text="Last Login" prefWidth="180.0"/>
+                        </columns>
+                        <placeholder>
+                            <Label text="No staff accounts found." style="-fx-text-fill: #64748B; -fx-font-size: 13px;"/>
+                        </placeholder>
+                    </TableView>
+                </VBox>
+            </Tab>
+
+            <!-- ========================================== -->
+            <!-- TAB 6: Audit Logs & System Settings Table  -->
+            <!-- ========================================== -->
+            <Tab fx:id="tabAuditAndSettings" text="  Audit Trail &amp; Settings (অডিট ও সেটিংস কী)  ">
+                <VBox spacing="20.0" style="-fx-background-color: white; -fx-padding: 24; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                    <!-- Section 1: Audit Trail -->
+                    <VBox spacing="12.0">
+                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                            <VBox spacing="2.0">
+                                <Label text="Immutable Financial &amp; System Audit Trail"
+                                       style="-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #1E293B;"/>
+                                <Label text="Tracks all sensitive business actions, user creation, sales, and system changes."
+                                       style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                            </VBox>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <TextField fx:id="txtAuditSearch" promptText="Search logs by keyword..." prefWidth="220.0" style="-fx-pref-height: 34px;"/>
+                            <Button fx:id="btnAddAuditNote" text=" + Add Note" onAction="#onAddAuditNote"
+                                    style="-fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: 600; -fx-padding: 7 14; -fx-cursor: hand;"/>
+                            <Button fx:id="btnDeleteAuditLog" text="Delete Log" onAction="#onDeleteAuditLog"
+                                    style="-fx-background-color: white; -fx-border-color: #FCA5A5; -fx-text-fill: #DC2626; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: 600; -fx-padding: 7 14; -fx-cursor: hand;"/>
+                            <Button fx:id="btnClearAuditLogs" text="Clear Logs" onAction="#onClearAuditLogs"
+                                    style="-fx-background-color: white; -fx-border-color: #FCA5A5; -fx-text-fill: #DC2626; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: 600; -fx-padding: 7 14; -fx-cursor: hand;"/>
+                            <Button fx:id="btnRefreshAuditLogs" text="Refresh" onAction="#onRefreshAuditLogs"
+                                    style="-fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: 600; -fx-padding: 7 14; -fx-cursor: hand;"/>
+                        </HBox>
+
+                        <TableView fx:id="tblAuditLogs" prefHeight="260.0" style="-fx-background-radius: 8;">
+                            <columns>
+                                <TableColumn fx:id="colAuditTime" text="Timestamp" prefWidth="150.0"/>
+                                <TableColumn fx:id="colAuditUser" text="User" prefWidth="120.0"/>
+                                <TableColumn fx:id="colAuditAction" text="Action" prefWidth="110.0"/>
+                                <TableColumn fx:id="colAuditEntity" text="Entity" prefWidth="120.0"/>
+                                <TableColumn fx:id="colAuditSummary" text="Summary &amp; Audit Details" prefWidth="450.0"/>
+                            </columns>
+                            <placeholder>
+                                <Label text="No audit log entries recorded yet." style="-fx-text-fill: #64748B; -fx-font-size: 13px;"/>
+                            </placeholder>
+                        </TableView>
+                    </VBox>
+
+                    <Separator/>
+
+                    <!-- Section 2: Key-Value Settings -->
+                    <VBox spacing="12.0">
+                        <HBox alignment="CENTER_LEFT" spacing="12.0">
+                            <VBox spacing="2.0">
+                                <Label text="Application Key/Value Settings Table"
+                                       style="-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #1E293B;"/>
+                                <Label text="View and configure low-level application flags and hardware parameters."
+                                       style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                            </VBox>
+                            <Region HBox.hgrow="ALWAYS"/>
+                            <Button fx:id="btnAddSettingKey" text=" + Set / Edit Key" onAction="#onAddSettingKey"
+                                    style="-fx-background-color: #1E60D5; -fx-text-fill: white; -fx-font-weight: 600; -fx-padding: 7 14; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                            <Button fx:id="btnDeleteSettingKey" text="Remove Key" onAction="#onDeleteSettingKey"
+                                    style="-fx-background-color: white; -fx-border-color: #FCA5A5; -fx-text-fill: #DC2626; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: 600; -fx-padding: 7 14; -fx-cursor: hand;"/>
+                            <Button fx:id="btnRefreshSettingsTable" text="Refresh" onAction="#onRefreshSettingsTable"
+                                    style="-fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 6; -fx-background-radius: 6; -fx-font-weight: 600; -fx-padding: 7 14; -fx-cursor: hand;"/>
+                        </HBox>
+
+                        <TableView fx:id="tblCustomSettings" prefHeight="220.0" style="-fx-background-radius: 8;">
+                            <columns>
+                                <TableColumn fx:id="colSettingKey" text="Setting Key" prefWidth="260.0"/>
+                                <TableColumn fx:id="colSettingValue" text="Setting Value" prefWidth="420.0"/>
+                                <TableColumn fx:id="colSettingUpdated" text="Last Updated" prefWidth="180.0"/>
+                            </columns>
+                            <placeholder>
+                                <Label text="No custom settings configured." style="-fx-text-fill: #64748B; -fx-font-size: 13px;"/>
+                            </placeholder>
+                        </TableView>
+                    </VBox>
+                </VBox>
+            </Tab>
+
+        </TabPane>
+    </VBox>
+</ScrollPane>
+

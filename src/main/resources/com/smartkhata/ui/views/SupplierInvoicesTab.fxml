@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.smartkhata.controller.SupplierInvoicesController"
+      spacing="14.0" style="-fx-padding: 14 0 0 0;">
+
+    <!-- Top Strip: Uninvoiced Liability Banner & Filter Controls -->
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <TextField fx:id="txtInvSearch" promptText="Search Invoice#, Vendor Bill#, GRN#, or supplier..." onKeyReleased="#onSearch"
+                   HBox.hgrow="ALWAYS"
+                   style="-fx-pref-height: 36px; -fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 0 12;"/>
+        <HBox alignment="CENTER_LEFT" spacing="6.0"
+              style="-fx-background-color: #FFFBEB; -fx-padding: 6 12; -fx-border-color: #FDE68A; -fx-border-radius: 8; -fx-background-radius: 8;">
+            <Label text="Unbilled GRNs (বিল বাকি):" style="-fx-font-size: 11px; -fx-font-weight: 700; -fx-text-fill: #92400E;"/>
+            <Label fx:id="lblUninvoicedLiability" text="BDT 0" style="-fx-font-size: 12.5px; -fx-font-weight: 800; -fx-text-fill: #B45309;"/>
+        </HBox>
+        <ComboBox fx:id="cmbInvPayStatus" onAction="#onFilterChanged" prefWidth="140.0"
+                  style="-fx-pref-height: 36px; -fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8;"/>
+        <Button text="Refresh" onAction="#onRefresh"
+                style="-fx-background-color: white; -fx-border-color: #CBD5E1; -fx-border-radius: 8; -fx-background-radius: 8; -fx-pref-height: 36px; -fx-padding: 0 14;"/>
+        <Button fx:id="btnInvoiceFromGrn" text="+ Bill from Uninvoiced GRN" onAction="#onInvoiceFromGrn"
+                style="-fx-background-color: #0E7B3A; -fx-text-fill: white; -fx-font-weight: 700; -fx-pref-height: 36px; -fx-padding: 0 15; -fx-background-radius: 8; -fx-cursor: hand;"/>
+    </HBox>
+
+    <!-- Main Split: Supplier Invoices Directory | 3-Way Match & Payment Actions -->
+    <HBox spacing="14.0" VBox.vgrow="ALWAYS">
+        <VBox spacing="10.0" HBox.hgrow="ALWAYS" styleClass="sk-card">
+            <TableView fx:id="tblInvoices" VBox.vgrow="ALWAYS" styleClass="table-view, compact-table">
+                <columns>
+                    <TableColumn fx:id="colInvNo" text="Invoice #" prefWidth="128.0"/>
+                    <TableColumn fx:id="colBillNo" text="Vendor Bill#" prefWidth="95.0"/>
+                    <TableColumn fx:id="colInvSupplier" text="Supplier" prefWidth="150.0"/>
+                    <TableColumn fx:id="colInvGrn" text="GRN #" prefWidth="115.0"/>
+                    <TableColumn fx:id="colInvMatch" text="3-Way Match" prefWidth="105.0"/>
+                    <TableColumn fx:id="colInvNet" text="Net" prefWidth="92.0"/>
+                    <TableColumn fx:id="colInvDue" text="Due" prefWidth="92.0"/>
+                    <TableColumn fx:id="colInvStatus" text="Pay Status" prefWidth="88.0"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+                <placeholder>
+                    <VBox alignment="CENTER" spacing="8.0" style="-fx-padding: 40px;">
+                        <Label text="No Supplier Invoices posted yet" style="-fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: #64748B;"/>
+                        <Label text="Click '+ Bill from Uninvoiced GRN' to verify quantities and record vendor payable into Paona Khata."
+                               style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+                    </VBox>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <VBox prefWidth="520.0" minWidth="440.0" maxWidth="600.0" spacing="12.0" styleClass="sk-card">
+            <VBox fx:id="vboxInvNoSelection" alignment="CENTER" spacing="10.0" VBox.vgrow="ALWAYS" style="-fx-padding: 50 20;">
+                <Label text="Select a Supplier Invoice" style="-fx-font-size: 15px; -fx-font-weight: 700; -fx-text-fill: #64748B;"/>
+                <Label text="Review 3-way PO / GRN / Invoice match, due date, payment allocations, or disburse supplier payment."
+                       textAlignment="CENTER" wrapText="true" style="-fx-font-size: 12px; -fx-text-fill: #94A3B8;"/>
+            </VBox>
+
+            <VBox fx:id="vboxInvDetail" spacing="10.0" VBox.vgrow="ALWAYS" visible="false" managed="false">
+                <VBox spacing="3.0">
+                    <Label fx:id="lblDetailInvNo" text="PINV-20261110-0001" style="-fx-font-size: 17px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                    <Label fx:id="lblDetailInvMeta" text="Supplier: — | GRN: — | Match: —" wrapText="true" style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+                </VBox>
+
+                <HBox spacing="8.0" alignment="CENTER_LEFT">
+                    <Button fx:id="btnPayInvoice" text="Record Payment (টাকা পরিশোধ)" onAction="#onRecordPayment"
+                            style="-fx-background-color: #0E7B3A; -fx-text-fill: white; -fx-font-weight: 700; -fx-padding: 6 12; -fx-background-radius: 6; -fx-cursor: hand;"/>
+                    <Button fx:id="btnVoidInvoice" text="Void Invoice" onAction="#onVoidInvoice"
+                            style="-fx-background-color: #FEF2F2; -fx-text-fill: #DC2626; -fx-font-weight: 700; -fx-border-color: #FECACA; -fx-border-radius: 6; -fx-background-radius: 6; -fx-padding: 6 12; -fx-cursor: hand;"/>
+                </HBox>
+
+                <HBox spacing="12.0" alignment="CENTER"
+                      style="-fx-background-color: #F8FAFC; -fx-padding: 8 12; -fx-background-radius: 8; -fx-border-color: #E2E8F0; -fx-border-radius: 8;">
+                    <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                        <Label text="NET BILL" style="-fx-font-size: 9.5px; -fx-font-weight: 700; -fx-text-fill: #64748B;"/>
+                        <Label fx:id="lblDetailNet" text="BDT 0" style="-fx-font-size: 13px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                    </VBox>
+                    <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                        <Label text="PAID" style="-fx-font-size: 9.5px; -fx-font-weight: 700; -fx-text-fill: #64748B;"/>
+                        <Label fx:id="lblDetailPaid" text="BDT 0" style="-fx-font-size: 13px; -fx-font-weight: 800; -fx-text-fill: #15803D;"/>
+                    </VBox>
+                    <VBox spacing="1.0" HBox.hgrow="ALWAYS">
+                        <Label text="DUE (বাকি)" style="-fx-font-size: 9.5px; -fx-font-weight: 700; -fx-text-fill: #64748B;"/>
+                        <Label fx:id="lblDetailDue" text="BDT 0" style="-fx-font-size: 14px; -fx-font-weight: 800; -fx-text-fill: #DC2626;"/>
+                    </VBox>
+                </HBox>
+
+                <TableView fx:id="tblInvItems" VBox.vgrow="ALWAYS" styleClass="table-view, compact-table">
+                    <columns>
+                        <TableColumn fx:id="colSiiProduct" text="Product" prefWidth="150.0"/>
+                        <TableColumn fx:id="colSiiQty" text="Billed Qty" prefWidth="78.0"/>
+                        <TableColumn fx:id="colSiiPrice" text="Unit Cost" prefWidth="82.0"/>
+                        <TableColumn fx:id="colSiiVar" text="Variance" prefWidth="72.0"/>
+                        <TableColumn fx:id="colSiiTotal" text="Line Total" prefWidth="88.0"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                </TableView>
+            </VBox>
+        </VBox>
+    </HBox>
+</VBox>

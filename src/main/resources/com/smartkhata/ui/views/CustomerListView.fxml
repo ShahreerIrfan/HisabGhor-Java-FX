@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.smartkhata.controller.CustomerListController"
+      spacing="14.0" styleClass="main-content, customer-page-root">
+    <padding>
+        <Insets top="16.0" right="20.0" bottom="18.0" left="20.0"/>
+    </padding>
+
+    <!-- Top Header Bar -->
+    <HBox alignment="CENTER_LEFT" spacing="10.0">
+        <!-- Left Title & Icon Tile -->
+        <HBox alignment="CENTER_LEFT" spacing="10.0" minWidth="-Infinity">
+            <ImageView fitWidth="40.0" fitHeight="40.0" preserveRatio="true" smooth="true">
+                <image>
+                    <Image url="@../images/customer/customers_tile.png"/>
+                </image>
+            </ImageView>
+            <VBox spacing="2.0" minWidth="-Infinity">
+                <Label text="Customers &amp; Baki Khata (গ্রাহক খাতা)" minWidth="-Infinity"
+                       style="-fx-font-size: 19.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                <Label text="Manage customer profiles, credit limits, and running receivable statements." minWidth="-Infinity"
+                       style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+            </VBox>
+        </HBox>
+
+        <!-- Center Soft Grocery Basket Accent (collapses gracefully when horizontal space is tight) -->
+        <StackPane fx:id="headerArtSpacer" HBox.hgrow="ALWAYS" alignment="BOTTOM_CENTER"
+                   minWidth="0.0" prefWidth="0.0" maxHeight="56.0" mouseTransparent="true"
+                   styleClass="customer-header-glow">
+            <ImageView fitHeight="52.0" fitWidth="86.0" preserveRatio="true" smooth="true" opacity="0.32">
+                <image>
+                    <Image url="@../images/customer/grocery_basket_alternate_transparent_2x.png"/>
+                </image>
+            </ImageView>
+        </StackPane>
+
+        <!-- Right Metric Chips & Primary CTA -->
+        <HBox alignment="CENTER_RIGHT" spacing="8.0" minWidth="-Infinity">
+            <!-- Total Customers Card -->
+            <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="metric-chip-neutral" minWidth="-Infinity"
+                  style="-fx-padding: 7px 12px;">
+                <ImageView fitWidth="28.0" fitHeight="28.0" preserveRatio="true" smooth="true">
+                    <image>
+                        <Image url="@../images/customer/customers_tile.png"/>
+                    </image>
+                </ImageView>
+                <VBox spacing="0.0">
+                    <Label text="Total Customers" minWidth="-Infinity" style="-fx-font-size: 10.5px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                    <Label fx:id="lblTotalCustomers" text="0" minWidth="-Infinity" style="-fx-font-size: 16.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Total Receivables Card -->
+            <HBox alignment="CENTER_LEFT" spacing="8.0" styleClass="metric-chip-danger" minWidth="-Infinity"
+                  style="-fx-padding: 7px 12px;">
+                <StackPane prefWidth="26.0" prefHeight="26.0" minWidth="26.0" minHeight="26.0"
+                           style="-fx-background-color: #FEE2E2; -fx-background-radius: 7px;">
+                    <ImageView fitWidth="15.0" fitHeight="15.0" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@../images/customer/database.png"/>
+                        </image>
+                    </ImageView>
+                </StackPane>
+                <VBox spacing="0.0">
+                    <Label text="Total Receivables (মোট বাকি)" minWidth="-Infinity" style="-fx-font-size: 10.5px; -fx-font-weight: 700; -fx-text-fill: #B91C1C;"/>
+                    <Label fx:id="lblTotalDues" text="BDT 0" minWidth="-Infinity" style="-fx-font-size: 16px; -fx-font-weight: 800; -fx-text-fill: #DC2626;"/>
+                </VBox>
+            </HBox>
+
+            <!-- Add Customer CTA -->
+            <Button fx:id="btnAddCustomer" text="Add Customer" onAction="#onAddCustomer"
+                    styleClass="btn-emerald-primary" minWidth="-Infinity" prefHeight="42.0"
+                    style="-fx-background-radius: 10px; -fx-padding: 0 15px; -fx-graphic-text-gap: 7px; -fx-font-size: 12.5px;">
+                <graphic>
+                    <SVGPath content="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="#FFFFFF" scaleX="0.75" scaleY="0.75"/>
+                </graphic>
+            </Button>
+        </HBox>
+    </HBox>
+
+    <!-- Search & Filter Toolbar -->
+    <HBox alignment="CENTER_LEFT" spacing="12.0">
+        <HBox fx:id="searchContainer" alignment="CENTER_LEFT" spacing="9.0" HBox.hgrow="ALWAYS"
+              styleClass="search-field" style="-fx-pref-height: 40px; -fx-padding: 0 12px;">
+            <ImageView fitWidth="16.0" fitHeight="16.0" preserveRatio="true" smooth="true">
+                <image>
+                    <Image url="@../images/customer/search.png"/>
+                </image>
+            </ImageView>
+            <TextField fx:id="txtSearch" promptText="Search customers by name or phone (e.g. Rahim, 017...)"
+                       onKeyReleased="#onSearchKeyReleased" HBox.hgrow="ALWAYS"
+                       style="-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 0; -fx-font-size: 13px;"/>
+            <Button fx:id="btnClearSearch" onAction="#onClearSearch" visible="false" managed="false"
+                    style="-fx-background-color: #F1F5F9; -fx-background-radius: 10px; -fx-padding: 3 6; -fx-cursor: hand;">
+                <graphic>
+                    <SVGPath content="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+                             fill="#64748B" scaleX="0.55" scaleY="0.55"/>
+                </graphic>
+            </Button>
+        </HBox>
+
+        <CheckBox fx:id="chkIncludeArchived" text="Include Archived (আর্কাইভকৃত)"
+                  onAction="#onToggleIncludeArchived" minWidth="-Infinity"
+                  style="-fx-font-size: 12.5px; -fx-font-weight: 500; -fx-text-fill: #334155; -fx-cursor: hand;"/>
+
+        <Button fx:id="btnRefresh" text="Refresh" onAction="#onRefresh"
+                styleClass="btn-subtle-refresh" minWidth="-Infinity">
+            <graphic>
+                <ImageView fitWidth="15.0" fitHeight="15.0" preserveRatio="true" smooth="true">
+                    <image>
+                        <Image url="@../images/customer/refresh.png"/>
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+    </HBox>
+
+    <!-- Main Content Area: Split Customer List & Profile/Ledger -->
+    <HBox spacing="14.0" VBox.vgrow="ALWAYS">
+
+        <!-- Left Card: Customer List -->
+        <VBox spacing="10.0" HBox.hgrow="ALWAYS" styleClass="sk-card" style="-fx-padding: 14px;">
+            <HBox alignment="CENTER_LEFT" spacing="10.0">
+                <ImageView fitWidth="32.0" fitHeight="32.0" preserveRatio="true" smooth="true">
+                    <image>
+                        <Image url="@../images/customer/customers_tile.png"/>
+                    </image>
+                </ImageView>
+                <VBox spacing="1.0">
+                    <Label text="Customer List" style="-fx-font-size: 15px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                    <Label text="All customers and their credit summary" style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+                </VBox>
+            </HBox>
+
+            <TableView fx:id="tblCustomers" VBox.vgrow="ALWAYS" styleClass="table-view, customer-table, compact-table">
+                <columns>
+                    <TableColumn fx:id="colName" text="Customer Name" minWidth="98.0" prefWidth="112.0"/>
+                    <TableColumn fx:id="colPhone" text="Phone Number" minWidth="96.0" prefWidth="110.0"/>
+                    <TableColumn fx:id="colAddress" text="Address" minWidth="58.0" prefWidth="82.0"/>
+                    <TableColumn fx:id="colCreditLimit" text="Credit Limit" minWidth="78.0" prefWidth="94.0"/>
+                    <TableColumn fx:id="colCurrentDue" text="Current Due (বাকি)" minWidth="112.0" prefWidth="128.0"/>
+                    <TableColumn fx:id="colStatus" text="Status" minWidth="64.0" prefWidth="68.0" style="-fx-alignment: CENTER;"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+                <placeholder>
+                    <VBox alignment="CENTER" spacing="10.0" style="-fx-padding: 40px;">
+                        <ImageView fitWidth="50.0" fitHeight="50.0" preserveRatio="true" smooth="true">
+                            <image>
+                                <Image url="@../images/customer/customers_tile.png"/>
+                            </image>
+                        </ImageView>
+                        <Label text="No customers found" style="-fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: #334155;"/>
+                        <Label text="Click '+ Add Customer' to register your first business client."
+                               style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+                    </VBox>
+                </placeholder>
+            </TableView>
+        </VBox>
+
+        <!-- Right Card: Customer Profile Details & Baki Ledger Statement -->
+        <VBox fx:id="pnlDetailContainer" prefWidth="468.0" minWidth="426.0" maxWidth="510.0"
+              spacing="12.0" styleClass="sk-card" style="-fx-padding: 14px;">
+
+            <!-- Empty State Placeholder when no customer is selected -->
+            <VBox fx:id="vboxNoSelection" alignment="CENTER" spacing="12.0" VBox.vgrow="ALWAYS" style="-fx-padding: 50px 24px;">
+                <ImageView fitWidth="52.0" fitHeight="52.0" preserveRatio="true" smooth="true">
+                    <image>
+                        <Image url="@../images/customer/customers_tile.png"/>
+                    </image>
+                </ImageView>
+                <Label text="Select a Customer" style="-fx-font-size: 15.5px; -fx-font-weight: 800; -fx-text-fill: #334155;"/>
+                <Label text="Select a customer from the left directory to view contact details, credit status, and complete Baki Khata statement."
+                       textAlignment="CENTER" wrapText="true" style="-fx-font-size: 12px; -fx-text-fill: #64748B;"/>
+            </VBox>
+
+            <!-- Active Customer Details & Ledger -->
+            <VBox fx:id="vboxCustomerDetails" spacing="12.0" VBox.vgrow="ALWAYS" visible="false" managed="false">
+
+                <!-- Profile Header Row -->
+                <HBox alignment="CENTER_LEFT" spacing="10.0">
+                    <StackPane prefWidth="36.0" prefHeight="36.0" minWidth="36.0" minHeight="36.0"
+                               maxWidth="36.0" maxHeight="36.0"
+                               style="-fx-background-color: #DCFCE7; -fx-background-radius: 18px;">
+                        <ImageView fitWidth="18.0" fitHeight="18.0" preserveRatio="true" smooth="true">
+                            <image>
+                                <Image url="@../images/customer/user.png"/>
+                            </image>
+                        </ImageView>
+                    </StackPane>
+
+                    <VBox spacing="2.0" HBox.hgrow="ALWAYS" minWidth="120.0">
+                        <Label fx:id="lblDetailName" text="Customer Name"
+                               style="-fx-font-size: 17.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                        <Label fx:id="lblDetailContact" text="Phone: — | Address: —" wrapText="true" minHeight="-Infinity"
+                               style="-fx-font-size: 11.5px; -fx-text-fill: #64748B;"/>
+                    </VBox>
+
+                    <Button fx:id="btnEditCustomer" text="Edit" onAction="#onEditCustomer"
+                            styleClass="btn-edit-soft" minWidth="-Infinity" style="-fx-padding: 6px 9px;">
+                        <graphic>
+                            <ImageView fitWidth="13.0" fitHeight="13.0" preserveRatio="true" smooth="true">
+                                <image>
+                                    <Image url="@../images/customer/pencil.png"/>
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="btnArchiveCustomer" text="Archive" onAction="#onToggleArchive"
+                            styleClass="btn-archive-soft" minWidth="-Infinity" style="-fx-padding: 6px 9px;">
+                        <graphic>
+                            <ImageView fx:id="imgArchiveAction" fitWidth="13.0" fitHeight="13.0" preserveRatio="true" smooth="true">
+                                <image>
+                                    <Image url="@../images/customer/archive.png"/>
+                                </image>
+                            </ImageView>
+                        </graphic>
+                    </Button>
+
+                    <Button fx:id="btnDeleteCustomer" text="Delete" onAction="#onDeleteCustomer"
+                            minWidth="-Infinity"
+                            style="-fx-background-color: #FEE2E2; -fx-text-fill: #B91C1C; -fx-font-weight: 700; -fx-background-radius: 8px; -fx-padding: 6px 9px; -fx-cursor: hand; -fx-font-size: 12px;">
+                        <graphic>
+                            <SVGPath content="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+                                     fill="#B91C1C" scaleX="0.6" scaleY="0.6"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+
+                <!-- Financial Metric Cards -->
+                <HBox spacing="8.0" alignment="CENTER">
+                    <!-- Current Due Card -->
+                    <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="customer-due-card" style="-fx-padding: 9px 10px;">
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                            <ImageView fitWidth="14.0" fitHeight="14.0" preserveRatio="true" smooth="true">
+                                <image>
+                                    <Image url="@../images/customer/database.png"/>
+                                </image>
+                            </ImageView>
+                            <Label text="Current Due (বাকি)" minWidth="-Infinity" style="-fx-font-size: 10.5px; -fx-font-weight: 600; -fx-text-fill: #64748B;"/>
+                        </HBox>
+                        <Label fx:id="lblDetailDue" text="BDT 0" minWidth="-Infinity"
+                               style="-fx-font-size: 15.5px; -fx-font-weight: 800; -fx-text-fill: #DC2626;"/>
+                    </VBox>
+
+                    <!-- Credit Limit Card -->
+                    <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="customer-limit-card" style="-fx-padding: 9px 10px;">
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                            <ImageView fitWidth="14.0" fitHeight="14.0" preserveRatio="true" smooth="true">
+                                <image>
+                                    <Image url="@../images/customer/shield-check.png"/>
+                                </image>
+                            </ImageView>
+                            <Label text="Credit Limit" minWidth="-Infinity" style="-fx-font-size: 10.5px; -fx-font-weight: 600; -fx-text-fill: #475569;"/>
+                        </HBox>
+                        <Label fx:id="lblDetailLimit" text="No limit" minWidth="-Infinity"
+                               style="-fx-font-size: 15.5px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                    </VBox>
+
+                    <!-- Available Credit Card -->
+                    <VBox spacing="4.0" HBox.hgrow="ALWAYS" styleClass="customer-available-card" style="-fx-padding: 9px 10px;">
+                        <HBox alignment="CENTER_LEFT" spacing="5.0">
+                            <ImageView fitWidth="14.0" fitHeight="14.0" preserveRatio="true" smooth="true">
+                                <image>
+                                    <Image url="@../images/customer/layers.png"/>
+                                </image>
+                            </ImageView>
+                            <Label text="Available Credit" minWidth="-Infinity" style="-fx-font-size: 10.5px; -fx-font-weight: 600; -fx-text-fill: #166534;"/>
+                        </HBox>
+                        <Label fx:id="lblDetailAvailable" text="Unlimited" minWidth="-Infinity"
+                               style="-fx-font-size: 15.5px; -fx-font-weight: 800; -fx-text-fill: #15803D;"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Notes Display (conditional) -->
+                <Label fx:id="lblDetailNotes" text="Notes: None" wrapText="true" visible="false" managed="false"
+                       style="-fx-font-size: 11.5px; -fx-text-fill: #475569; -fx-background-color: #F8FAFC; -fx-border-color: #E2E8F0; -fx-border-radius: 8; -fx-background-radius: 8; -fx-padding: 7 10;"/>
+
+                <!-- Ledger Statement Header -->
+                <HBox alignment="CENTER_LEFT" spacing="8.0" style="-fx-padding: 2 0 0 0;">
+                    <ImageView fitWidth="24.0" fitHeight="24.0" preserveRatio="true" smooth="true">
+                        <image>
+                            <Image url="@../images/customer/ledger_tile.png"/>
+                        </image>
+                    </ImageView>
+                    <Label text="Customer Ledger Statement (খাতাপত্র)" minWidth="-Infinity"
+                           style="-fx-font-size: 13px; -fx-font-weight: 800; -fx-text-fill: #0F172A;"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="Traceable &amp; Immutable" minWidth="-Infinity" style="-fx-font-size: 10.5px; -fx-text-fill: #64748B;"/>
+                </HBox>
+
+                <!-- Ledger Statement Table -->
+                <TableView fx:id="tblLedger" VBox.vgrow="ALWAYS" styleClass="table-view, compact-table">
+                    <columns>
+                        <TableColumn fx:id="colLedgerDate" text="Date" minWidth="72.0" prefWidth="78.0"/>
+                        <TableColumn fx:id="colLedgerType" text="Type / Description" minWidth="92.0" prefWidth="122.0"/>
+                        <TableColumn fx:id="colLedgerDebit" text="Debit (+)" minWidth="72.0" prefWidth="80.0"/>
+                        <TableColumn fx:id="colLedgerCredit" text="Credit (-)" minWidth="64.0" prefWidth="74.0"/>
+                        <TableColumn fx:id="colLedgerBalance" text="Balance" minWidth="84.0" prefWidth="90.0"/>
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                    </columnResizePolicy>
+                    <placeholder>
+                        <VBox alignment="CENTER" spacing="8.0" style="-fx-padding: 24px;">
+                            <ImageView fitWidth="40.0" fitHeight="40.0" preserveRatio="true" smooth="true">
+                                <image>
+                                    <Image url="@../images/customer/ledger_tile.png"/>
+                                </image>
+                            </ImageView>
+                            <Label text="No ledger entries for this customer yet." style="-fx-font-size: 12.5px; -fx-font-weight: 700; -fx-text-fill: #334155;"/>
+                            <Label text="Invoices and payments will appear here chronologically." style="-fx-font-size: 11px; -fx-text-fill: #64748B;"/>
+                        </VBox>
+                    </placeholder>
+                </TableView>
+            </VBox>
+
+        </VBox>
+    </HBox>
+</VBox>
